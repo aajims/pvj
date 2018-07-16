@@ -30,12 +30,9 @@
     "dependencies": {
         "@websanova/vue-auth": "^2.21.12-beta",
         "bootstrap-sass": "^3.3.7",
-<<<<<<< HEAD
         "eonasdan-bootstrap-datetimepicker": "^4.17.47",
         "moment": "^2.22.2",
         "vue-bootstrap-datetimepicker": "^4.1.4",
-=======
->>>>>>> 94e7ad8505e6713db335ab6523af234f5a4f4980
         "vue-events": "^3.1.0"
     }
 }

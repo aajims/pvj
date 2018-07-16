@@ -7,6 +7,8 @@ use Illuminate\Http\JsonResponse;
 use App\User;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Validator;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -142,12 +144,52 @@ class UserController extends Controller
         $user->name = $request->input('name');
         $user->email = $request->input('email');
         $user->telepon = $request->input('telepon');
+        if(!empty($request->input('password'))){
+            $user->password = bcrypt($request->input('password'));
+        }
+        $user->level = $request->input('level');
+        $user->nm_merchant = $request->input('nm_merchant');
+        $user->logo = $request->input('logo');
         $user->save();
         return response()->json([
             'success' => true
         ]);
     }
 
+    public function updatePassword(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'password' => 'bail|required|',
+            'newpassword' => 'bail|required',
+            'confirmpassword' => 'bail|required|same:newpassword',
+        ]);
+
+        if ($validator->fails()) {
+            $errors = $validator->errors();
+            return response()->json([
+                'errors' => $errors->all()
+            ], JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        if ( ! Hash::check(
+            $request->input('password'),
+            Auth::user()->password
+        )) {
+            return response()->json([
+                'errors' => [
+                    'Kata sandi lama salah, masukkan kata sandi saat ini !'
+                ]
+            ], JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        $user = User::find(Auth::id());
+        $user->password = Hash::make($request->input('newpassword'));
+        $user->save();
+
+        return response()->json([
+            'success' => true
+        ]);
+    }
     /**
      * Remove the specified resource from storage.
      *

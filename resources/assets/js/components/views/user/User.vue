@@ -1,5 +1,5 @@
 <template>
-    <div id="page-wrapper">
+    <div id="page-wrapper" class="sms">
         <div class="container-fluid">
             <div class="row head-page">
                 <div class="col-lg-12">
@@ -10,26 +10,28 @@
                     <div class="alert alert-success" v-for="val in success">
                         {{ val }}
                     </div>
-                    <vuetable ref="vuetable"
-                              v-bind:api-url="APIUrl + '/user'"
-                              v-bind:fields="fields"
-                              pagination-path=""
-                              v-bind:css="css.table"
-                              v-bind:sort-order="sortOrder"
-                              v-bind:multi-sort="true"
-                              v-bind:http-options = "options"
-                              @vuetable:pagination-data="onPaginationData">
-                        <template slot="actions" slot-scope="props">
-                            <div class="table-button-container">
-                                <button class="btn btn-sm btn-primary" @click="showRow(props.rowData)"><i class="fa fa-search"></i></button>
-                                <button class="btn btn-sm btn-success" @click="editRow(props.rowData)"><i class="fa fa-pencil"></i></button>
-                                <button class="btn btn-sm btn-danger" data-toggle="modal" data-target="#deleteModal" v-on:click="deleteRow(props.rowData)"><i class="fa fa-trash"></i></button>
+                    <div id="printTable">
+                        <vuetable ref="vuetable"
+                                  v-bind:api-url="APIUrl + '/user'"
+                                  v-bind:fields="fields"
+                                  pagination-path=""
+                                  v-bind:css="css.table"
+                                  v-bind:sort-order="sortOrder"
+                                  v-bind:multi-sort="true"
+                                  v-bind:http-options = "options"
+                                  @vuetable:pagination-data="onPaginationData">
+                            <template slot="actions" slot-scope="props">
+                                <div class="table-button-container">
+                                    <button class="btn btn-sm btn-primary" @click="showRow(props.rowData)"><i class="fa fa-search"></i></button>
+                                    <button class="btn btn-sm btn-success" @click="editRow(props.rowData)"><i class="fa fa-pencil"></i></button>
+                                    <button class="btn btn-sm btn-danger" data-toggle="modal" data-target="#deleteModal" v-on:click="deleteRow(props.rowData)"><i class="fa fa-trash"></i></button>
 
-                            </div>
-                        </template>
-                    </vuetable>
+                                </div>
+                            </template>
+                        </vuetable>
+                    </div>
                     <vuetable-pagination ref="pagination"
-                                         :css="css.pagination"
+                                         :css="css.paginations"
                                          @vuetable-pagination:change-page="onChangePage">
                     </vuetable-pagination>
                 </div>
@@ -59,6 +61,7 @@
     </div>
 </template>
 <script>
+    import Vue from 'vue';
     import Vuetable from 'vuetable-2/src/components/Vuetable';
     import VuetablePagination from 'vuetable-2/src/components/VuetablePagination';
 
@@ -119,12 +122,12 @@
                         ascendingIcon: 'fa fa-angle-up',
                         descendingIcon: 'fa fa-angle-down'
                     },
-                    pagination: {
-                        wrapperClass: 'pagination',
+                    paginations: {
+                        wrapperClass: 'paginations',
                         activeClass: 'active',
-                        disabledClass: 'disabled',
+                        disabledClass: '',
                         pageClass: 'page-item',
-                        linkClass: 'link',
+                        linkClass: 'page-item',
                         icons: {
                             first: '',
                             prev: '',
@@ -182,19 +185,4 @@
         }
     }
 </script>
-<style type="text/css">
-    .pagination > a {
-        border: 1px solid #eee;
-        padding: 13px;
-        display: inline-block;
-        cursor: pointer;
-    }
-    .pagination > a:hover,
-    .pagination .active {
-        background: #eee;
-    }
-    .pagination .disabled {
-        pointer-events: none;
-        cursor: disabled;
-    }
-</style>
+

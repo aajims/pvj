@@ -3,28 +3,28 @@
     <div class="container-fluid">
       <div class="row head-page">
         <div class="col-md-12 col-sm-12">
-          <h2 class="Profile">Profil</h2>
-            <div class="alert alert-danger" v-if="errors" v-for="error in errors">
-                <p>{{ error }}</p>
-            </div>
-            <form @submit.prevent="save">
+          <h2 class="Profile">Edit Profil</h2>
+            <form class="form-edit" @submit.prevent="save">
+                <div class="alert alert-danger" v-if="errors" v-for="error in errors">
+                    <p>{{ error }}</p>
+                </div>
                 <div class="col-md-6 col-sm-6 edit">
-                    <div class="styled-input agile-styled-input-top">
+                    <div class="styledd-input agile-styledd-input-top">
                         <input type="text" name="name" v-model="name">
                         <label>Full Name</label>
                         <span></span>
                     </div>
-                    <div class="styled-input agile-styled-input-top">
+                    <div class="styledd-input agile-styledd-input-top">
                         <input type="text" name="telepon" v-model="telepon">
                         <label>Phone Number</label>
                         <span></span>
                     </div>
-                    <div class="styled-input agile-styled-input-top">
+                    <div class="styledd-input agile-styledd-input-top">
                         <input type="email" name="email" v-model="email">
                         <label>E-mail</label>
                         <span></span>
                     </div>
-                    <button type="submit" class="btn Button-Save"><p class="Edit-Profile">Save <img src="../img/check.svg" class="Write"></p></button>
+                    <button type="submit" class="Btn-Save"><p class="Save">Save <img src="../img/check.svg" class="Write"></p></button>
                 </div>
             </form>
         </div>
@@ -57,8 +57,11 @@
                 if (this.name == null) {
                     this.errors.push('The Name field is required !');
                     return false;
-                } else if (this.telepon == null) {
-                    this.errors.push('Telephone number field is required !');
+                } else if (this.telepon.length <= 10) {
+                    this.errors.push('Telephone number field Min 10 Digit !');
+                    return false;
+                } else if (this.telepon.length >= 12) {
+                    this.errors.push('Telephone number field Max 12 Digit !');
                     return false;
                 } else if (this.email == null) {
                     this.errors.push('The Email field is required !');
@@ -77,9 +80,6 @@
                     telepon: app.telepon
                 }).then(function(res){
                     app.loading = false;
-                    window.localStorage.setItem('success', JSON.stringify([
-                        'Profil User : ' + app.name + ' telah diubah'
-                    ]));
                     app.$router.push({name: 'home'});
                 }).catch(function(res) {
                     if (res.response != undefined) {

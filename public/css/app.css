@@ -251,7 +251,42 @@ input:focus ~ .highlight {  -webkit-animation: inputHighlighter 0.3s ease;      
   line-height: 1em;
   letter-spacing: 2px;
 }
-
+.form-controls {
+  display: block;
+  width: 90%;
+  height: 34px;
+  margin-left: 30px;
+  margin-top: -30px;
+  padding: 6px 12px;
+  font-size: 14px;
+  line-height: 1.42857143;
+  color: #555;
+  background-color: #fff;
+  /* background-image: none; */
+  /* border: 1px solid #ccc; */
+  border-radius: 4px;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+  box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+  -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+  transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+  transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+  transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+}
+.input {
+  font-size: 18px;
+  padding: 10px 10px 10px 5px;
+  -webkit-appearance: none;
+  display: block;
+  background: transparent;
+  color: #4a4a4a;
+  width: 100%;
+  /*border: none;*/
+  border-radius: 0;
+  /*border-bottom: 1px solid #ddd;*/
+}
+.date {
+  width: 100%;
+}
 .navbar {
   position: relative;
   min-height: 50px;
@@ -410,9 +445,9 @@ a {
   text-decoration: none;
 }
 .btn-create{
-  margin-bottom: 50px;
+  margin-bottom: 37px;
   margin-left: 25px;
-  margin-top: 25px;
+  margin-top: 65px;
 }
 .body-form{
   border: solid 1px #666666;
@@ -453,9 +488,10 @@ a {
 
 /*-------------------     Edit Profil     --------------------------*/
 .Profile {
-  width: 67px;
+  width: 159px;
   height: 26px;
   margin-top: 52px;
+  margin-left: 39px;
   font-family: SFProText;
   font-size: 22px;
   font-weight: normal;
@@ -465,9 +501,35 @@ a {
   letter-spacing: normal;
   color: #ffffff;
 }
+.form-edit {
+  padding: 30px;
+  padding-top: 60px;
+  margin-top: 63px;
+  background: #fff;
+}
 .profil{
   margin-top: 81px;
   margin-left: 25px;
+}
+.Btn-Save {
+  width: 105px;
+  height: 42px;
+  border-radius: 5px;
+  background-color: #8a2785;
+  -webkit-box-shadow: 0 0 30px 0 rgba(0, 0, 0, 0.2);
+          box-shadow: 0 0 30px 0 rgba(0, 0, 0, 0.2);
+}
+.Save {
+  width: 99px;
+  height: 19px;
+  font-family: SFProText;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: #ffffff;
 }
 .Shape {
   width: 24px;
@@ -475,7 +537,7 @@ a {
   background-color: #4a4a4a;
 }
 .Patar-Hutabarat {
-  width: 189px;
+  width: 289px;
   height: 29px;
   font-family: SFProText;
   font-size: 24px;
@@ -577,17 +639,18 @@ a {
   margin-left: 20px;
 }
 .pas{
-  margin-top: 29px;
+  margin-top: 63px;
 }
 .pass{
   margin-top: 35px;
+  margin-bottom: 90px;
   border-top: solid 1px #ebebeb;
 }
 .past{
   margin-top: 30px;
 }
 .form-pass{
-  margin-left: -45px;
+  margin-left: 20px;
 }
 .Password {
   width: 85px;
@@ -618,6 +681,7 @@ a {
   width: 167px;
   height: 26px;
   margin-top: 52px;
+  margin-left: 45px;
   font-family: SFProText;
   font-size: 22px;
   font-weight: normal;
@@ -634,11 +698,53 @@ a {
   -o-object-fit: contain;
      object-fit: contain;
 }
+
+.styledd-input
+.agile-styledd-input-top {
+  margin-top: 0;
+}
+.styledd-input {
+  width: 70%;
+  margin: 2em 4em 2em 0em;
+  position: relative;
+  margin-top: 0;
+}
+.contact-form input[type="text"],
+.contact-form input[type="number"],
+.contact-form textarea {
+  font-size: 1.3em;
+  color: #26272b;
+  padding: 1.3em 1em .3em 0em;
+  border: 0;
+  width: 100%;
+  border-bottom: 1px solid #b9b9b9;
+  background: none;
+  -webkit-appearance: none;
+  outline: none;
+}
+.styledd-input label {
+  padding: 0.5em 0em;
+  position: absolute;
+  top: -11px;
+  color: #ccc;
+  left: 0;
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+  pointer-events: none;
+  font-weight: 600;
+  font-size: 1em;
+  display: block;
+  line-height: 1em;
+  letter-spacing: 2px;
+}
 /*-------------------    // End Edit Profil     --------------------------*/
 
 /*---------------------------- page sms ----------------------------------*/
+.mdl-filter {
+  padding-top: 29px;
+}
 .Btn-Filter {
-  width: 175px;
+  width: 141px;
   height: 42px;
   border-radius: 5px;
   background-color: #8a2785;
@@ -661,6 +767,57 @@ a {
 .filter{
   float: right;
   margin: 1px 20px 20px 0;
+}
+.Search {
+  width: 147px;
+  height: 10px;
+  font-family: SFProText;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: center;
+  color: #ffffff;
+}
+.src {
+  margin-left: 25px;
+}
+
+.styleds-input {
+  width: 70%;
+  margin: 0em 4em 2em 3em;
+  position: relative;
+  margin-top: -32px;
+}
+.contact-form input[type="text"],
+.contact-form input[type="number"],
+.contact-form textarea {
+  font-size: 1.3em;
+  color: #26272b;
+  padding: 1.3em 1em .3em 0em;
+  border: 0;
+  width: 100%;
+  border-bottom: 1px solid #b9b9b9;
+  background: none;
+  -webkit-appearance: none;
+  outline: none;
+}
+.styleds-input label {
+  padding: 0.5em 0em;
+  position: absolute;
+  top: -11px;
+  color: #ccc;
+  left: 0;
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+  pointer-events: none;
+  font-weight: 600;
+  font-size: 1em;
+  display: block;
+  line-height: 1em;
+  letter-spacing: 2px;
 }
 
 @media (min-width: 768px) {
@@ -1118,7 +1275,9 @@ form {      padding: 30px;    padding-top: 60px;    background: #fff;}
 .powered a:hover {  font-style:italic;}
 .group {   position: relative;  margin-bottom: 45px; }
 
-input {  font-size: 18px;  padding: 10px 10px 10px 5px;  -webkit-appearance: none;  display: block;  background: transparent;  color: #03a9f4;  width: 100%;  border: none;  border-radius: 0;  border-bottom: 1px solid #ddd;}
+input {  font-size: 18px;  padding: 10px 10px 10px 5px;
+    -webkit-appearance: none;  display: block;  background: transparent;  color: #4a4a4a;
+    width: 100%;  border: none;  border-radius: 0;  border-bottom: 1px solid #ddd;}
 
 input:focus { outline: none; }
 
@@ -1131,7 +1290,7 @@ input:focus ~ label, input.used ~ label {  top: -20px;  -webkit-transform: scale
 
 /* Underline */
 .bar {  position: relative;  display: block;  width: 100%;}
-.bar:before, .bar:after {  content: '';  height: 2px;   width: 0;  bottom: 1px;   position: absolute;  background: #4a89dc;   -webkit-transition:all 0.2s ease;   transition: all 0.2s ease;}
+.bar:before, .bar:after {  content: '';  height: 2px;   width: 0;  bottom: 1px;   position: absolute;  background: #4a4a4a;   -webkit-transition:all 0.2s ease;   transition: all 0.2s ease;}
 .bar:before { left: 50%; }
 .bar:after { right: 50%; }
 
@@ -1146,7 +1305,7 @@ input:focus ~ .highlight {  -webkit-animation: inputHighlighter 0.3s ease;      
 
 /* Animations */
 @-webkit-keyframes inputHighlighter {
-    from { background: #4a89dc; }
+    from { background: #4a4a4a; }
     to  { width: 0; background: transparent; }
 }
 
@@ -1198,9 +1357,20 @@ html, body{   background-size:cover;    margin:0;padding:0;    height:100%;}
 
 
 /*  -----------------------------------------------------------  */
-
+.Log-In {
+    width: 99px;
+    height: 19px;
+    font-family: SFProText;
+    font-size: 16px;
+    font-weight: 600;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #4a4a4a;
+}
 .body-login{
-    background-image: url(/images/bg-login.jpg?82f2f1df2fa895cfc1ae30fa3dce8158);
+    background-image: url(/images/bg-login.jpg?7ac8228e1ebf6f604104a5fb54b291ab);
     background-size: cover;
     -webkit-background-size: cover;
     -moz-background-size: cover;
@@ -1218,6 +1388,10 @@ html, body{   background-size:cover;    margin:0;padding:0;    height:100%;}
     opacity: 0.5;
     background-color: #8A2785;
 }
+.login-panel {
+    margin-top: 19%;
+    margin-bottom: 35%;
+}
 
 .logo{
     margin-right: 19%;
@@ -1231,7 +1405,8 @@ html, body{   background-size:cover;    margin:0;padding:0;    height:100%;}
     margin-right: 3%;
     margin-bottom: 5%;
 }
-.styled-input.agile-styled-input-top{
+.styled-input
+.agile-styled-input-top{
     margin-top: 0;
 }
 .styled-input {
@@ -1240,8 +1415,8 @@ html, body{   background-size:cover;    margin:0;padding:0;    height:100%;}
     margin: 2em 0 2em 1em;
     position: relative;
 }
-.contact-form input[type="password"],
-.contact-form input[type="email"],
+.contact-form input[type="text"],
+.contact-form input[type="number"],
 .contact-form textarea {
     font-size: 1.3em;
     color: #26272b;
@@ -1253,42 +1428,20 @@ html, body{   background-size:cover;    margin:0;padding:0;    height:100%;}
     -webkit-appearance: none;
     outline: none;
 }
-.styled-input input:focus~label,
-.styled-input input:valid~label,
-.styled-input textarea:focus~label,
-.styled-input textarea:valid~label {
-    font-size: 1em;
-    color: #d3d4d6;
-    top: -1.3em;
-    -webkit-transition: all 0.125s;
-    transition: all 0.125s;
-}
 .styled-input label {
-    padding: 1.5em 0em;
+    padding: 0.5em 0em;
     position: absolute;
-    top: 0;
+    top: -11px;
     color: #ccc;
     left: 0;
     -webkit-transition: all 0.3s;
     transition: all 0.3s;
     pointer-events: none;
     font-weight: 600;
-    font-size: 1.2em;
+    font-size: 1em;
     display: block;
     line-height: 1em;
     letter-spacing: 2px;
-}
-.styled-input input~span,
-.styled-input textarea~span {
-    display: block;
-    width: 0;
-    height: 2px;
-    background: #8A2785;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    -webkit-transition: all 0.125s;
-    transition: all 0.125s;
 }
 @charset "UTF-8";
 

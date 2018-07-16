@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -6,6 +7,8 @@ use Illuminate\Http\JsonResponse;
 use App\Sms;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Validator;
+use FPDF;
+
 class SmsController extends Controller
 {
     /**
@@ -28,8 +31,8 @@ class SmsController extends Controller
             ->orderBy($sort[0], $sort[1]);
 
         // Apply Filter
-        if ($msisdn = $request->input('msisdn')) {
-            $data->where('sdn', 'like', '%' . $msisdn. '%');
+        if ($receiver = $request->input('receiver')) {
+            $data->where('receiver', 'like', '%' . $receiver. '%');
             // $data->where('receiver', 'like', '%' . $msisdn. '%');
         }
 
@@ -60,39 +63,7 @@ class SmsController extends Controller
     public function create()
     {
     }
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'name' => 'bail|required',
-            'telepon' => 'bail|required',
-            'email'    => 'bail|required|email',
-            'level'   => 'bail|required'
-        ]);
-        if ($validator->fails()) {
-            $errors = $validator->errors();
-            return response()->json([
-                'errors' => $errors->all()
-            ], JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
-        }
-        $user = new Sms;
-        $user->name = $request->input('name');
-        $user->email = $request->input('email');
-        $user->telepon = $request->input('telepon');
-        $user->password = bcrypt($request->input('password'));
-        $user->level = $request->input('level');
-        $user->nm_merchant = $request->input('nm_merchant');
-        $user->logo = $request->input('logo');
-        $user->save();
-        return response()->json([
-            'success' => true
-        ]);
-    }
+
     /**
      * Display the specified resource.
      *
@@ -161,5 +132,63 @@ class SmsController extends Controller
         return response()->json([
             'succcess' => true
         ]);
+    }
+
+    /**
+     * Download PDF
+     * @return [type] [description]
+     */
+    public function downloadPDF(Request $request) {
+        $sms = Sms::orderBy('id', 'asc');
+        foreach ($request->input('data') as $key => $val) {
+            $sms->orWhere('id', $val);
+        }
+        $pdf = new FPDF('P', 'mm', 'A4');
+        $pdf->AddPage();
+        $pdf->SetFont('Arial','B', 7);
+
+        $pdf->Cell(25, 7, 'Date & time', 1, 0, 'C');
+        $pdf->Cell(25, 7, 'Amount', 1, 0, 'C');
+        $pdf->Cell(30, 7, 'Receiver', 1, 0, 'C');
+        $pdf->Cell(20, 7, 'MSISDN', 1, 0, 'C');
+        $pdf->Cell(88, 7, 'Message', 1, 0, 'C');
+        $pdf->ln();
+
+        $pdf->SetFont('Arial','', 7);
+        foreach ($sms->get() as $val) {
+            $x = $pdf->GetX();
+            $y = $pdf->GetY();
+            $height = 10;
+
+            $pdf->MultiCell(25, $height, $val->received, 1, 'C');
+
+            $pdf->SetXY($x += 25, $y);
+            $pdf->MultiCell(25, $height, 'Rp.' . number_format(
+                $val->amount,
+                2,
+                '.',
+                ','
+            ), 1, 'C');
+            $pdf->SetXY($x += 25, $y);
+            $pdf->MultiCell(30, $height, number_format(
+                $val->receiver,
+                3,
+                ' ',
+                ' '
+            ), 1, 'C');
+
+            $pdf->SetXY($x += 30, $y);
+            $pdf->MultiCell(20, $height, $val->sdn, 1, 'C');
+
+            $pdf->SetXY($x += 20, $y);
+            $pdf->MultiCell(88, $height, 'Message', 1, 'C');
+        }
+
+        $pdf->ln();
+
+        $response = $pdf->Output('s');
+
+        return response($response, 200)
+                  ->header('Content-Type', 'application/pdf');
     }
 }

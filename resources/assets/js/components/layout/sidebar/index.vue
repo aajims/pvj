@@ -15,9 +15,8 @@ export default {
                 <h3 class="maen"> MAIN</h3>
               </li>
                 <li><router-link to="/" exact> <i class="fa fa-desktop fa-fw"></i>&nbsp;&nbsp; Profil </router-link></li>
-                <li><router-link to="/sms"> <i class="fa fa-list-alt fa-fw"></i>&nbsp;&nbsp; SMS Report </router-link></li>
-                <li><router-link to="/user"> <i class="fa fa-list-alt fa-fw"></i>&nbsp;&nbsp; Data User </router-link></li>
-                <!--<li><router-link to="/logout"> <i class="fa fa-sign-out fa-fw"></i>&nbsp;&nbsp; Logout </router-link></li>-->
+                <li><router-link v-if="isAdmin || isStaff" to="/sms"> <i class="fa fa-list-alt fa-fw"></i>&nbsp;&nbsp; SMS Report </router-link></li>
+                <li><router-link v-if="isAdmin" to="/user"> <i class="fa fa-list-alt fa-fw"></i>&nbsp;&nbsp; Data User </router-link></li>
               <li><a href="javascript:void(0)" v-on:click="logout"> <i class="fa fa-lock fa-fw"></i>&nbsp;&nbsp; Logout</a></li>
             </ul>
         </div>
@@ -26,6 +25,20 @@ export default {
 <script>
     import axios from 'axios'
     export default {
+        data() {
+            return {
+                isAdmin: false,
+                isStaff: false,
+                isMerchants: false
+            }
+        },
+
+        created() {
+            let level = this.$auth.user().level
+            this.isAdmin = (level == 'admin')
+            this.isStaff = (level == 'staff')
+            this.isMerchants = (level = 'merchant')
+        },
         methods: {
             logout() {
                 this.$auth.logout({

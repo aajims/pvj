@@ -3,92 +3,45 @@
         <div class="container-fluid">
             <div class="row head-page">
                 <div class="col-lg-12">
-<<<<<<< HEAD
-                    <h1 class="page-header">SMS Report</h1>
-                    <div class="btn-sms pull-right">
-                        <button class="btn btn-filter" data-toggle="modal" data-target="#filterModal">Search Filter</button>
-                    </div>
-                    <div class="clearfix"></div>
-                </div>
-=======
                     <div class="page-header">
                         <h1>SMS Report</h1>
                         <div class="btn-sms pull-right">
-                            <button class="btn btn-warning">Download CSV</button>
-                            <button class="btn btn-filter" data-toggle="modal" data-target="#filterModal">Search Filter</button>
+                            <button class="btn btn-warning" v-if="searching" v-on:click="downloadPDF">Download PDF</button>
+                            <button class="btn btn-filter" data-toggle="modal" data-target="#filterModal">Search Filter <i class="fa fa-sliders"></i> </button>
                         </div>
                         <div class="clearfix"></div>
                     </div>
 
-                    <div class="alert alert-success" v-for="val in success">
-                        {{ val }}
+                    <div class="alert alert-info" v-if="searching">
+                        <p>Anda sedang mencari data berdasarkan RECEIVER  "{{ receiver }}"
+                            <!--<button class="btn btn-warning pull-right" v-on:click="resetFilter()">Batalkan filter</button>-->
+                        </p>
+                        <div class="clearfix"></div>
                     </div>
-                    <vuetable ref="vuetable"
-                              v-bind:api-url="APIUrl + '/sms'"
-                              v-bind:fields="fields"
-                              pagination-path=""
-                              v-bind:css="css.table"
-                              v-bind:sort-order="sortOrder"
-                              v-bind:multi-sort="true"
-                              v-bind:http-options = "options"
-                              :append-params="moreParams"
-                              @vuetable:pagination-data="onPaginationData">
->>>>>>> 94e7ad8505e6713db335ab6523af234f5a4f4980
+                    <!--api-url="http://192.168.2.20:8005/sms/smsFilter"-->
+                    <!--api-url="http://192.168.2.20:8005/sms/sms"-->
+                    <!--v-bind:api-url="APIUrl + '/sms'"-->
+                    <div id="printTable">
+                        <vuetable ref="vuetable"
+                                v-bind:api-url="APIUrl + '/sms'"
+                                  v-bind:fields="fields"
+                                  pagination-path=""
+                                  v-bind:css="css.table"
+                                  v-bind:sort-order="sortOrder"
+                                  v-bind:multi-sort="true"
+                                  v-bind:http-options = "options"
+                                  :append-params="moreParams"
+                                  @vuetable:pagination-data="onPaginationData">
 
-                <div class="alert alert-success" v-for="val in success">
-                    {{ val }}
+                        </vuetable>
+                    </div>
+                    <vuetable-pagination ref="pagination"
+                                         :css="css.paginations"
+                                         @vuetable-pagination:change-page="onChangePage">
+                    </vuetable-pagination>
                 </div>
-                <vuetable ref="vuetable"
-                          v-bind:api-url="APIUrl + '/sms'"
-                          v-bind:fields="fields"
-                          pagination-path=""
-                          v-bind:css="css.table"
-                          v-bind:sort-order="sortOrder"
-                          v-bind:multi-sort="true"
-                          v-bind:http-options = "options"
-                          :append-params="moreParams"
-                          @vuetable:pagination-data="onPaginationData">
-
-                </vuetable>
-                <vuetable-pagination ref="pagination"
-                                     :css="css.paginations"
-                                     @vuetable-pagination:change-page="onChangePage">
-                </vuetable-pagination>
             </div>
         </div>
-<<<<<<< HEAD
-    </div>
-    <!-- Modal -->
-    <div id="filterModal" class="modal fade" role="dialog">
-        <div class="modal-dialog">
-            <!-- Modal content-->
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Search Filter</h4>
-                </div>
-                <div class="modal-body">
-                    <form v-on:submit="filter()">
-                        <div class="form-group">
-                            <!-- <label for="">Receiver Number (MSISDN)</label> -->
-                            <input type="text" class="form-control" v-model="msisdn" placeholder="Receiver Number (MSISDN)" @keyup.enter="doFilter">
-                        </div>
-                        <div class="form-group">
-                            <!-- <label for="">Date range</label> -->
-                            <div class="col-md-6">
-                                <date-picker  @keyup.enter="doFilter" v-model="startDate" :config="config" placeholder="Start Date"></date-picker>
-                            </div>
-                            <div class="col-md-6">
-                                <date-picker  @keyup.enter="doFilter" v-model="endDate" :config="config" placeholder="End Date"></date-picker>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" @click="doFilter" class="btn btn-info pull-left">Search</button>
-                    <button type="button" class="btn btn-danger pull-right" data-dismiss="modal">Close</button>
-                    <div class="clearfix"></div>
-=======
         <!-- Modal -->
         <div id="filterModal" class="modal fade" role="dialog">
             <div class="modal-dialog">
@@ -99,52 +52,45 @@
                         <h4 class="modal-title">Search Filter</h4>
                     </div>
                     <div class="modal-body">
-                        <form v-on:submit="filter()">
-                            <div class="form-group">
-                                <!-- <label for="">Receiver Number (MSISDN)</label> -->
-                                <input type="text" class="form-control" v-model="msisdn" placeholder="Receiver Number (MSISDN)" @keyup.enter="doFilter">
+                        <form class="mdl-filter" v-on:submit="filter()">
+                            <img src="../img/phone.png" class="Phone">
+                            <div class="styleds-input agile-styleds-input-top" @key.enter="doFilter">
+                                <input type="text" v-model="receiver"/>
+                                <label>Receiver Number (MSISDN)</label>
+                                <span></span>
                             </div>
-                            <div class="form-group">
+                            <div class="row">
                                 <!-- <label for="">Date range</label> -->
                                 <div class="col-md-6">
-                                    <date-picker  @keyup.enter="doFilter" v-model="startDate" :config="config" placeholder="Start Date"></date-picker>
+                                    <img src="../img/calendar.png"/>
+                                    <date-picker class="form-controls" v-model="startDate" :config="config" placeholder="Start Date"></date-picker>
                                 </div>
                                 <div class="col-md-6">
-                                    <date-picker  @keyup.enter="doFilter" v-model="endDate" :config="config" placeholder="End Date"></date-picker>
+                                    <img src="../img/calendar.png"/>
+                                    <date-picker class="form-controls" v-model="endDate" :config="config" placeholder="End Date"></date-picker>
                                 </div>
                             </div>
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" @click="doFilter" class="btn btn-info pull-left">Search</button>
-                        <button type="button" class="btn btn-danger pull-right" data-dismiss="modal">Close</button>
+                        <button type="button" @click="doFilter" class="Btn-Filter" data-dismiss="modal"><p class="Search">Search <i class="fa fa-search src"></i></p></button>
                         <div class="clearfix"></div>
                     </div>
->>>>>>> 94e7ad8505e6713db335ab6523af234f5a4f4980
                 </div>
             </div>
         </div>
     </div>
-    </div>
 </template>
 <script>
-    import Vuetable from 'vuetable-2/src/components/Vuetable';
+    import Vue from 'vue';
+    import Vuetable from 'vuetable-2/src/components/Vuetable'
     import VuetablePagination from 'vuetable-2/src/components/VuetablePagination';
-    
-    // Import this component
-    import DatePicker from 'vue-bootstrap-datetimepicker';
 
-<<<<<<< HEAD
     // Import this component
     import DatePicker from 'vue-bootstrap-datetimepicker';
     // Import date picker css
     import 'eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css';
 
-=======
-    // Import date picker css
-    import 'eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css';
-    
->>>>>>> 94e7ad8505e6713db335ab6523af234f5a4f4980
     export default {
         mounted() {
             this.$events.$on('filter-set', eventData => this.onFilterSet(eventData))
@@ -171,12 +117,10 @@
                 },
                 startDate: null,
                 endDate: null,
-                msisdn: null,
-<<<<<<< HEAD
+                receiver: null,
 
-=======
-                
->>>>>>> 94e7ad8505e6713db335ab6523af234f5a4f4980
+                searching: false,
+
                 success: [],
                 deleteInfo: [],
                 options: {
@@ -185,6 +129,13 @@
                     }
                 },
                 fields: [{
+                    name: 'id',
+                    sortField: 'id',
+                    title: 'ID',
+                    titleClass: 'hidden',
+                    dataClass: 'hidden table-id-row'
+                    // visible: false
+                },{
                     name: 'received',
                     sortField: 'received',
                     title: 'Received'
@@ -197,8 +148,8 @@
                     sortField: 'receiver',
                     title: 'Receiver'
                 },{
-                    name: 'sdn',
-                    sortField: 'sdn',
+                    name: 'msisdn',
+                    sortField: 'msisdn',
                     title: 'MSISDN'
                 }],
                 css: {
@@ -228,14 +179,23 @@
                     }
                 },
                 sortOrder: [{
-                    field: 'received',
-                    sortField: 'received',
+                    field: 'id',
+                    sortField: 'id',
                     direction: 'asc'
                 }
                 ],
                 moreParams: {}
             };
         },
+//        computed: {
+//            resetFilter () {
+//                this.searching = false
+//                this.receiver = null  // clear the text in text input
+//                this.startDate = null
+//                this.endDate = null
+//                this.$events.fire('filter-reset')
+//            }
+//        },
         methods: {
             onPaginationData (paginationData) {
                 this.$refs.pagination.setPaginationData(paginationData)
@@ -244,37 +204,16 @@
             onChangePage (page) {
                 this.$refs.vuetable.changePage(page)
             },
-            showRow(rowData){
-                let id = rowData.id;
-                this.$router.push({name: 'show.user', params: {id}})
-            },
-            editRow(rowData) {
-                let id = rowData.id;
-                this.$router.push({name: 'edit.user', params: {id}})
-            },
-            deleteRow(rowData){
-                this.deleteInfo = rowData;
-            },
-            deleteUser() {
-                this.$http.delete(apiUrl() + '/user/' + this.deleteInfo.id)
-                    .then(function(res){
-                        window.localStorage.setItem('success', JSON.stringify([
-                            'User telah dihapus'
-                        ]));
-                        window.location.assign(window.location.href);
-                    })
-                    .catch(function(res){
-                    });
-            },
             doFilter () {
+                this.searching = true
                 this.$events.fire('filter-set', JSON.stringify({
-                    msisdn: this.msisdn,
+                    receiver: this.receiver,
                     startDate: this.startDate,
                     endDate: this.endDate
                 }))
             },
             resetFilter () {
-                this.msisdn = null  // clear the text in text input
+                this.receiver = null  // clear the text in text input
                 this.startDate = null
                 this.endDate = null
                 this.$events.fire('filter-reset')
@@ -282,15 +221,11 @@
             onFilterSet (str) {
                 let data = JSON.parse(str)
                 this.moreParams = {
-                    'msisdn': data.msisdn,
+                    'receiver': data.receiver,
                     'start-date': data.startDate,
                     'end-date': data.endDate
                 }
-<<<<<<< HEAD
 
-=======
-                
->>>>>>> 94e7ad8505e6713db335ab6523af234f5a4f4980
                 let vm = this
                 Vue.nextTick( function() {
                     vm.$refs.vuetable.refresh()
@@ -302,8 +237,19 @@
                 Vue.nextTick( function() {
                     vm.$refs.vuetable.refresh()
                 })
+            },
+            downloadPDF() {
+                // this.savedID = document.getElementsByClassName('table-id-row')
+                let el = document.getElementsByClassName('table-id-row')
+                let queryData = '?';
+                for (var i = 0; i < el.length-1; i++) {
+                    queryData += 'data[]=' + el[i].innerText + '&'
+                }
+                // Remove last &
+                queryData = queryData.replace(/(^\s*&)|(&\s*$)/g, '')
+                window.open(baseUrl() + '/sms/download-pdf' + queryData, "_blank", "width=800,height=500",  false)
+//                window.open('http://192.168.2.20:8005/sms/smsTest' + queryData, "_blank", "width=800,height=500",  false)
             }
         }
     }
 </script>
-

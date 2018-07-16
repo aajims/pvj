@@ -10,7 +10,7 @@
             </div>
             <div class="login-panel panel panel-default">
               <div class="head-login">
-                <h3>Log In</h3>
+                <h3 class="Log-In">Log In</h3>
               </div>
               <div class="panel-input contact-form">
                 <form @submit.prevent="login">
@@ -20,7 +20,7 @@
                   <fieldset>
                     <div class="form">
                       <span class="lg">
-                          <img src="../img/envelope.png">
+                          <img src="../img/phone.png">
                       </span>
                       <div class="styled-input agile-styled-input-top">
                         <input type="text" name="telepon" v-model="telepon">
@@ -38,7 +38,7 @@
                     </div>
                     <div class="styled-input agile-styled-input-top">
                       <div class="lupa">
-                        <router-link to="/register" >  Lupa Password ? </router-link>
+                        <a href="#" data-toggle="modal" data-target="#lupaModal">  Lupa Password ? </a>
                       </div>
                     </div>
                     <!-- Change this to a button or input when using this as a form -->
@@ -46,6 +46,26 @@
                   </fieldset>
                 </form>
               </div>
+            </div>
+            <div class="modal fade" id="lupaModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-danger" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h4 class="modal-title">Anda Lupa Password</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <p>Silahkan Hubungi Customer Service Kami </p>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                  </div>
+                </div>
+                <!-- /.modal-content -->
+              </div>
+              <!-- /.modal-dialog -->
             </div>
           </div>
         </div>
