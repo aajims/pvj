@@ -1261,6 +1261,24 @@ table.dataTable thead .sorting:after {
     font-family: DINPro;
     color: #8A2785;
 }
+.form-login{
+    padding: 30px;
+    padding-top: 10px;
+    background: #fff;
+}
+.Log-In {
+    width: 72.8px;
+    height: 19px;
+    font-family: SFProText;
+    font-size: 16px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: center;
+    color: #ffffff;
+}
 .form{
     margin-top: 6%;
 }
@@ -1383,7 +1401,7 @@ html, body{   background-size:cover;    margin:0;padding:0;    height:100%;}
     position: absolute;
     top: 0;
     right: 0;
-    bottom:-70%;
+    bottom:-20%;
     left: 0;
     opacity: 0.5;
     background-color: #8A2785;

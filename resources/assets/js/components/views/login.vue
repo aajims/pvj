@@ -18,7 +18,7 @@
                     <p>{{ error }}</p>
                   </div>
                   <fieldset>
-                    <div class="form">
+                    <div class="form-login">
                       <span class="lg">
                           <img src="../img/phone.png">
                       </span>
@@ -42,7 +42,7 @@
                       </div>
                     </div>
                     <!-- Change this to a button or input when using this as a form -->
-                    <button type="submit" class="btn btn-lg btn-login">Log in</button>
+                    <button type="submit" class="btn btn-lg btn-login"><p class="Log-In">Log in</p></button>
                   </fieldset>
                 </form>
               </div>

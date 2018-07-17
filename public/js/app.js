@@ -42632,7 +42632,7 @@ var render = function() {
                     }),
                     _vm._v(" "),
                     _c("fieldset", [
-                      _c("div", { staticClass: "form" }, [
+                      _c("div", { staticClass: "form-login" }, [
                         _vm._m(2),
                         _vm._v(" "),
                         _c(
@@ -42706,14 +42706,7 @@ var render = function() {
                       _vm._v(" "),
                       _vm._m(4),
                       _vm._v(" "),
-                      _c(
-                        "button",
-                        {
-                          staticClass: "btn btn-lg btn-login",
-                          attrs: { type: "submit" }
-                        },
-                        [_vm._v("Log in")]
-                      )
+                      _vm._m(5)
                     ])
                   ],
                   2
@@ -42721,7 +42714,7 @@ var render = function() {
               ])
             ]),
             _vm._v(" "),
-            _vm._m(5)
+            _vm._m(6)
           ])
         ])
       ])
@@ -42786,6 +42779,16 @@ var staticRenderFns = [
         )
       ])
     ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "button",
+      { staticClass: "btn btn-lg btn-login", attrs: { type: "submit" } },
+      [_c("p", { staticClass: "Log-In" }, [_vm._v("Log in")])]
+    )
   },
   function() {
     var _vm = this
