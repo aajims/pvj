@@ -57,10 +57,10 @@
                 if (this.name == null) {
                     this.errors.push('The Name field is required !');
                     return false;
-                } else if (this.telepon.length <= 10) {
+                } else if (this.telepon.length <= 9) {
                     this.errors.push('Telephone number field Min 10 Digit !');
                     return false;
-                } else if (this.telepon.length >= 12) {
+                } else if (this.telepon.length >= 13) {
                     this.errors.push('Telephone number field Max 12 Digit !');
                     return false;
                 } else if (this.email == null) {
