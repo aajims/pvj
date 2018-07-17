@@ -23,7 +23,7 @@
                     <!--v-bind:api-url="APIUrl + '/sms'"-->
                     <div id="printTable">
                         <vuetable ref="vuetable"
-                                v-bind:api-url="APIUrl + '/sms'"
+                                  api-url="http://192.168.2.20:8005/sms/smsTest"
                                   v-bind:fields="fields"
                                   pagination-path=""
                                   v-bind:css="css.table"

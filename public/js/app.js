@@ -43479,7 +43479,7 @@ var render = function() {
                 _c("vuetable", {
                   ref: "vuetable",
                   attrs: {
-                    "api-url": _vm.APIUrl + "/sms",
+                    "api-url": "http://192.168.2.20:8005/sms/smsTest",
                     fields: _vm.fields,
                     "pagination-path": "",
                     css: _vm.css.table,
