@@ -2,10 +2,13 @@
   <div id="page-wrapper">
     <div class="container-fluid">
       <div class="row head-page">
+
         <div class="col-md-12 col-sm-12">
           <h2 class="Profile">Profil</h2>
+          <div class="alert alert-success" v-if="success" v-for="val in success">
+            {{ val }}
+          </div>
           <div class="profil">
-            <input type="hidden" v-model="id"/>
             <p class="Patar-Hutabarat"><img src="../../img/profile.png">&nbsp;&nbsp;   {{ $auth.user().name }}</p>
             <div class="phone">
               <p class="Phone-Number">Phone Number</p>
@@ -15,15 +18,11 @@
               <p class="E-mail">Email </p>
               <p class="patarhutabaratpvj">{{ $auth.user().email }}</p>
             </div>
-
                 <button class="btn Button-Filter" @click="editRow(id)"><p class="Edit-Profile">Edit Profil <img src="../../img/write.svg" class="Write"></p></button>
-                <!--<router-link v-bind:to=" { name: 'edit.profil', params.id } " class="btn btn-default Button-Filter"><p class="Edit-Profile">Edit Profil <img src="../../img/write.svg" class="Write"></p></router-link>-->
                 <div class="pass">
                   <p class="Password">Password</p>
-                  <!--<button class="btn Button-pass" @click="editRow($auth.rowData)"><p class="Edit-Profile">Edit Profil <img src="../../img/write.svg" class="Write"></p></button>-->
                   <router-link v-bind:to=" { name: 'edit.password' } " class="btn Button-pass"><p class="Change-Password">Change Password<img src="../../img/Locked.svg" class="Locked"/></p></router-link>
                 </div>
-
           </div>
         </div>
       </div>
@@ -38,14 +37,10 @@
                 name: null,
                 email: null,
                 telepon: null,
+                success: [],
                 errors: [],
                 loading: false
             }
-        },
-        created() {
-            this.$auth.ready(function () {
-                console.log(this); // Will be proper context.
-            });
         },
         methods: {
             editRow(rowData) {
@@ -56,6 +51,8 @@
         created() {
             let app = this;
             this.id = this.$auth.user().id;
+            this.success = JSON.parse(window.localStorage.getItem('success'))
+            window.localStorage.removeItem('success')
 
             this.$http.get(apiUrl() + '/user/' + this.id)
                 .then(function(res) {

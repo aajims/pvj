@@ -156,6 +156,28 @@ class UserController extends Controller
         ]);
     }
 
+    public function updateProfil(Request $request, $id) {
+        $validator = Validator::make($request->all(), [
+            'name' => 'bail|required',
+            'telepon' => 'bail|required',
+            'email'    => 'bail|required|email'
+        ]);
+        if ($validator->fails()) {
+            $errors = $validator->errors();
+            return response()->json([
+                'errors' => $errors->all()
+            ], JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
+        }
+        $user = User::find($id);
+        $user->name = $request->input('name');
+        $user->email = $request->input('email');
+        $user->telepon = $request->input('telepon');
+        $user->save();
+        return response()->json([
+            'success' => true
+        ]);
+    }
+
     public function updatePassword(Request $request)
     {
         $validator = Validator::make($request->all(), [

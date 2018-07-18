@@ -5,6 +5,9 @@
         <div class="col-md-12 col-sm-12">
           <h2 class="Profile">Edit Profil</h2>
             <form class="form-edit" @submit.prevent="save">
+                <div class="alert alert-success" v-if="success" v-for="val in success">
+                    {{ val }}
+                </div>
                 <div class="alert alert-danger" v-if="errors" v-for="error in errors">
                     <p>{{ error }}</p>
                 </div>
@@ -41,6 +44,7 @@
                 email: null,
                 telepon: null,
                 errors: [],
+                success: [],
                 loading: false
             }
         },
@@ -50,9 +54,10 @@
             this.name    = this.$auth.user().name
             this.email   = this.$auth.user().email
             this.telepon = this.$auth.user().telepon
+
         },
         methods: {
-            save() {
+            save: function () {
                 this.errors = [];
                 if (this.name == null) {
                     this.errors.push('The Name field is required !');
@@ -68,20 +73,16 @@
                     return false;
                 }
 
-                if (this.loading) {
-                    return false;
-                }
                 let app = this;
-                app.loading = true;
-                app.errors = null;
-                this.$http.put(apiUrl() + '/user/' + this.id, {
+                this.$http.put(apiUrl() + '/user/updateProfile/' + this.id, {
                     name: app.name,
                     email: app.email,
                     telepon: app.telepon
-                }).then(function(res){
-                    app.loading = false;
+                }).then(function (res) {
+                    console.log(res)
+                    localStorage.setItem('success', JSON.stringify(['Data Profil sudah di rubah']))
                     app.$router.push({name: 'home'});
-                }).catch(function(res) {
+                }).catch(function (res) {
                     if (res.response != undefined) {
                         app.errors = res.response.data.errors
                     }

@@ -11,19 +11,21 @@
                         </div>
                         <div class="clearfix"></div>
                     </div>
-
-                    <div class="alert alert-info" v-if="searching">
+                    <div class="alert alert-danger" v-if="errors" v-for="error in errors">
+                        <p>{{ error }}</p>
+                    </div>
+                    <div class="alert alert-info" v-if="searching && ! (errors.length > 0)">
                         <p>Anda sedang mencari data berdasarkan RECEIVER  "{{ receiver }}"
                             <!--<button class="btn btn-warning pull-right" v-on:click="resetFilter()">Batalkan filter</button>-->
                         </p>
                         <div class="clearfix"></div>
                     </div>
                     <!--api-url="http://192.168.2.20:8005/sms/smsFilter"-->
-                    <!--api-url="http://192.168.2.20:8005/sms/sms"-->
+                    <!--api-url="http://192.168.2.20:8005/sms/smsTest"-->
                     <!--v-bind:api-url="APIUrl + '/sms'"-->
                     <div id="printTable">
                         <vuetable ref="vuetable"
-                                  api-url="http://192.168.2.20:8005/sms/smsTest"
+                                api-url="http://192.168.2.20:8005/sms/smsTest"
                                   v-bind:fields="fields"
                                   pagination-path=""
                                   v-bind:css="css.table"
@@ -55,7 +57,7 @@
                         <form class="mdl-filter" v-on:submit="filter()">
                             <img src="../img/phone.png" class="Phone">
                             <div class="styleds-input agile-styleds-input-top" @key.enter="doFilter">
-                                <input type="text" v-model="receiver"/>
+                                <input type="text" name="receiver" v-model="receiver"/>
                                 <label>Receiver Number (MSISDN)</label>
                                 <span></span>
                             </div>
@@ -63,11 +65,11 @@
                                 <!-- <label for="">Date range</label> -->
                                 <div class="col-md-6">
                                     <img src="../img/calendar.png"/>
-                                    <date-picker class="form-controls" v-model="startDate" :config="config" placeholder="Start Date"></date-picker>
+                                    <date-picker class="form-controls" id="starDate" v-model="startDate" :config="config" placeholder="Start Date"></date-picker>
                                 </div>
                                 <div class="col-md-6">
                                     <img src="../img/calendar.png"/>
-                                    <date-picker class="form-controls" v-model="endDate" :config="config" placeholder="End Date"></date-picker>
+                                    <date-picker class="form-controls" id="endDate" v-model="endDate" :config="config" placeholder="End Date"></date-picker>
                                 </div>
                             </div>
                         </form>
@@ -118,7 +120,7 @@
                 startDate: null,
                 endDate: null,
                 receiver: null,
-
+                errors: [],
                 searching: false,
 
                 success: [],
@@ -130,11 +132,10 @@
                 },
                 fields: [{
                     name: 'id',
-                    sortField: 'id',
                     title: 'ID',
                     titleClass: 'hidden',
-                    dataClass: 'hidden table-id-row'
-                    // visible: false
+                    dataClass: 'hidden table-id-row',
+                    sortField: 'id'
                 },{
                     name: 'received',
                     sortField: 'received',
@@ -220,6 +221,48 @@
             },
             onFilterSet (str) {
                 let data = JSON.parse(str)
+                // reset error
+                this.errors = []
+                if (data.receiver == null) {
+                    this.errors.push('Filter: Receiver tidak boleh kosong')
+                    return
+                } else if (data.startDate == null) {
+                    this.errors.push('Filter: Tanggal mulai tidak boleh kosong')
+                    return
+                } else if(data.endDate == null) {
+                    this.errors.push('Filter: Tanggal selesai tidak boleh kosong')
+                    return
+                }
+
+                let startDate = data.startDate.toString().split(' ')
+                let startDateTime = startDate[1].split(':')
+                startDate = startDate[0].split('-')
+
+                let sDate = new Date(
+                    startDate[0], // year
+                    startDate[1]-1,  // month, start from 0
+                    startDate[2], // day
+                    startDateTime[0], // hours
+                    startDateTime[1] // minute
+                )
+
+                let endDate = data.endDate.toString().split(' ')
+                let endDateTime = endDate[1].split(':')
+                endDate = endDate[0].split('-')
+
+                let eDate = new Date(
+                    endDate[0], // year
+                    endDate[1]-1,  // month, start from 0
+                    endDate[2], // day
+                    endDateTime[0], // hours
+                    endDateTime[1] // minute
+                )
+
+                if (eDate.getTime() <= sDate.getTime()) {
+                    this.errors.push('Filter: Range waktu harus benar, tanggal berakhir tidak boleh lebih dari tanggal dimulai')
+                    return
+                }
+
                 this.moreParams = {
                     'receiver': data.receiver,
                     'start-date': data.startDate,

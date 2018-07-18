@@ -10,7 +10,7 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-
+Route::get('sms/download-pdf', 'SmsController@downloadPDF');
 Route::get('{any}', 'SpaController@index')->where('any', '.*');
 
 Route::get('/', function () {

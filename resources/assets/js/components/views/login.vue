@@ -13,12 +13,12 @@
                 <h3 class="Log-In">Log In</h3>
               </div>
               <div class="panel-input contact-form">
-                <form @submit.prevent="login">
+                <form class="form-login"  @submit.prevent="login">
                   <div class="alert alert-danger" v-if="errors" v-for="error in errors">
                     <p>{{ error }}</p>
                   </div>
                   <fieldset>
-                    <div class="form-login">
+                    <div class="form">
                       <span class="lg">
                           <img src="../img/phone.png">
                       </span>
@@ -42,7 +42,7 @@
                       </div>
                     </div>
                     <!-- Change this to a button or input when using this as a form -->
-                    <button type="submit" class="btn btn-lg btn-login"><p class="Log-In">Log in</p></button>
+                    <button type="submit" class="btn btn-lg btn-login"><p class="Log-In-btn">Log in</p></button>
                   </fieldset>
                 </form>
               </div>
