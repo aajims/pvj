@@ -12,7 +12,10 @@ export default {
                 <h3><img class="bars" src="../../img/pariz.png">&nbsp; Paris Van Java</h3><p>Merchant</p>
               </li>
               <li>
-                <h3 class="maen"> MAIN</h3>
+                  <h5 class="balance"><b> Balance</b></h5>
+                  <form @submit.prevent="getbalance">
+                      <h3 class="maen"><strong>Rp. {{ balance }} ,- </strong><button type="submit" class="btn-refresh"><i class="fa fa-refresh"></i></button> </h3>
+                  </form>
               </li>
                 <li><router-link to="/" exact> <i class="fa fa-desktop fa-fw"></i>&nbsp;&nbsp; Profil </router-link></li>
                 <li><router-link v-if="isAdmin || isStaff" to="/sms"> <i class="fa fa-list-alt fa-fw"></i>&nbsp;&nbsp; SMS Report </router-link></li>
@@ -27,9 +30,11 @@ export default {
     export default {
         data() {
             return {
+                id: null,
                 isAdmin: false,
                 isStaff: false,
-                isMerchants: false
+                isMerchants: false,
+                balance : 0,
             }
         },
 
@@ -38,6 +43,9 @@ export default {
             this.isAdmin = (level == 'admin')
             this.isStaff = (level == 'staff')
             this.isMerchants = (level = 'merchant')
+            // Inisialisasi data
+            this.id      = this.$auth.user().id
+            this.getbalance()
         },
         methods: {
             logout() {
@@ -45,6 +53,20 @@ export default {
                     makeRequest: true,
                     redirect: '/login',
                 });
+            },
+            getbalance () {
+                var vm = this
+                this.$http.post('http://192.168.2.20:8005/sms/getBalance', {
+                    msisdn: '08999722215'
+                }).then(function (response) {
+                    console.log(response);
+                    var res = response.data.balance
+
+                    vm.balance = res
+                })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
             }
         }
     }

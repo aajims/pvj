@@ -5,9 +5,6 @@
         <div class="col-md-12 col-sm-12">
           <h2 class="Profile">Edit Profil</h2>
             <form class="form-edit" @submit.prevent="save">
-                <div class="alert alert-success" v-if="success" v-for="val in success">
-                    {{ val }}
-                </div>
                 <div class="alert alert-danger" v-if="errors" v-for="error in errors">
                     <p>{{ error }}</p>
                 </div>
@@ -80,7 +77,7 @@
                     telepon: app.telepon
                 }).then(function (res) {
                     console.log(res)
-                    localStorage.setItem('success', JSON.stringify(['Data Profil sudah di rubah']))
+                    localStorage.setItem('success', JSON.stringify(['Data Profil berhasil di Update']))
                     app.$router.push({name: 'home'});
                 }).catch(function (res) {
                     if (res.response != undefined) {

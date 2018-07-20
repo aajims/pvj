@@ -5,10 +5,10 @@
 
         <div class="col-md-12 col-sm-12">
           <h2 class="Profile">Profil</h2>
-          <div class="alert alert-success" v-if="success" v-for="val in success">
-            {{ val }}
-          </div>
           <div class="profil">
+            <div class="alert alert-success" v-if="success" v-for="val in success">
+              {{ val }}
+            </div>
             <p class="Patar-Hutabarat"><img src="../../img/profile.png">&nbsp;&nbsp;   {{ $auth.user().name }}</p>
             <div class="phone">
               <p class="Phone-Number">Phone Number</p>
