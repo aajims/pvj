@@ -82,22 +82,37 @@ body {
   }
 }
 .balance {
-  margin-left: 35%;
+  text-align: center;
   margin-right: auto;
+  position: relative;
 }
 .balance h5{
   font-family: SFProText;
   color: #333333;
 }
 .maen{
-  margin-left: 17%;
-  margin-right: auto;
+  margin-left: 0px;
+  margin-right: 0px;
+  font-weight: 300;
+  text-align: center;
+  margin-bottom: 19px;
 }
 .maen h3{
   font-family: DINPro;
   font-size: 22px;
+  margin-bottom: 23px;
   letter-spacing: 1px;
   color: #333333;
+}
+.form-balance {
+  padding-top: 5px;
+  background-color: #fff;
+  position: relative;
+  text-align: center;
+}
+.btn-filter, .btn-refresh {
+  color: #8A2785;
+  display: inline-block;
 }
 .use{
   width: 20px;
@@ -124,6 +139,9 @@ body {
   color: #fff;
   background-color: #8A2785;
   display: inline-block;
+  width: 60px;
+  margin: 0 auto;
+  position: relative;
   padding: 5px 15px;
   border-radius: 4px;
 }

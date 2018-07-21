@@ -13,8 +13,9 @@ export default {
               </li>
               <li>
                   <h5 class="balance"><b> Balance</b></h5>
-                  <form @submit.prevent="getbalance">
-                      <h3 class="maen"><strong>Rp. {{ balance }} ,- </strong><button type="submit" class="btn-refresh"><i class="fa fa-refresh"></i></button> </h3>
+                  <form class="form-balance" @submit.prevent="getbalance">
+                      <h3 class="maen"><strong >Rp. {{ balance }} ,- </strong></h3>
+                      <button type="submit" class="btn-refresh"><i class="fa fa-refresh"></i></button>
                   </form>
               </li>
                 <li><router-link to="/" exact> <i class="fa fa-desktop fa-fw"></i>&nbsp;&nbsp; Profil </router-link></li>
@@ -57,7 +58,7 @@ export default {
             getbalance () {
                 var vm = this
                 this.$http.post('http://192.168.2.20:8005/sms/getBalance', {
-                    msisdn: '08999722215'
+                    msisdn: $auth.user().telepon
                 }).then(function (response) {
                     console.log(response);
                     var res = response.data.balance

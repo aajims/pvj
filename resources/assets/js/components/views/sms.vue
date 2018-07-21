@@ -65,11 +65,11 @@
                                 <!-- <label for="">Date range</label> -->
                                 <div class="col-md-6">
                                     <img src="../img/calendar.png"/>
-                                    <date-picker class="form-controls" id="starDate" v-model="startDate" :config="config" placeholder="Start Date"></date-picker>
+                                    <date-picker class="form-controls" id="starDate" v-model="startDate" :config="config" placeholder="Start Date" aria-required="true"></date-picker>
                                 </div>
                                 <div class="col-md-6">
                                     <img src="../img/calendar.png"/>
-                                    <date-picker class="form-controls" id="endDate" v-model="endDate" :config="config" placeholder="End Date"></date-picker>
+                                    <date-picker class="form-controls" id="endDate" v-model="endDate" :config="config" placeholder="End Date" aria-required="true"></date-picker>
                                 </div>
                             </div>
                         </form>
@@ -95,6 +95,16 @@
 
     export default {
         mounted() {
+            let now = new Date()
+            let nowDate = now.getFullYear() + '-' +
+                (now.getMonth() + 1) + '-' +
+                now.getDate() + ' ' +
+                now.getHours() + ':' +
+                now.getMinutes()
+            this.startDate = nowDate
+            this.endDate = nowDate
+            this.receiver = this.$auth.user().telepon
+
             this.$events.$on('filter-set', eventData => this.onFilterSet(eventData))
             this.$events.$on('filter-reset', e => this.onFilterReset())
         },
