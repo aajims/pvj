@@ -15,7 +15,15 @@ export default {
         { name: 'Task 4', complete: '80', type: 'danger' }
       ]
     }
-  }
+  },
+    methods: {
+        logout() {
+            this.$auth.logout({
+                makeRequest: true,
+                redirect: '/login',
+            });
+        }
+    }
 }
 </script>
 
@@ -24,7 +32,7 @@ export default {
         <dropdown>
             <li><router-link v-bind:to="{name: 'edit.profil'}"><i class="fa fa-user-circle-o fa-fw"></i> User Profile</router-link></li>
             <li class="divider"></li>
-            <li><a href="#"><i class="fa fa-sign-out fa-fw"></i> Logout</a></li>
+            <li><a href="javascript:void(0)" v-on:click="logout"> <i class="fa fa-lock fa-fw"></i>&nbsp;&nbsp; Logout</a></li>
         </dropdown>
     </ul>
 </template>

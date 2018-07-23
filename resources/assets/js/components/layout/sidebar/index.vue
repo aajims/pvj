@@ -58,7 +58,7 @@ export default {
             getbalance () {
                 var vm = this
                 this.$http.post('http://192.168.2.20:8005/sms/getBalance', {
-                    msisdn: $auth.user().telepon
+                    msisdn: this.$auth.user().telepon
                 }).then(function (response) {
                     console.log(response);
                     var res = response.data.balance

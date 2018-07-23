@@ -32,6 +32,7 @@
                                   v-bind:sort-order="sortOrder"
                                   v-bind:multi-sort="true"
                                   v-bind:http-options = "options"
+
                                   :append-params="moreParams"
                                   @vuetable:pagination-data="onPaginationData">
 
@@ -57,7 +58,7 @@
                         <form class="mdl-filter" v-on:submit="filter()">
                             <img src="../img/phone.png" class="Phone">
                             <div class="styleds-input agile-styleds-input-top" @key.enter="doFilter">
-                                <input type="text" name="receiver" v-model="receiver"/>
+                                <input type="text" name="receiver" disabled v-model="receiver"/>
                                 <label>Receiver Number (MSISDN)</label>
                                 <span></span>
                             </div>
@@ -65,7 +66,8 @@
                                 <!-- <label for="">Date range</label> -->
                                 <div class="col-md-6">
                                     <img src="../img/calendar.png"/>
-                                    <date-picker class="form-controls" id="starDate" v-model="startDate" :config="config" placeholder="Start Date" aria-required="true"></date-picker>
+                                    <date-picker class="form-controls" id="starDate" v-model="startDate" :config="config" placeholder="Start Date" ></date-picker>
+                                    <span>{{ msgStart }}</span>
                                 </div>
                                 <div class="col-md-6">
                                     <img src="../img/calendar.png"/>
@@ -109,6 +111,7 @@
             this.$events.$on('filter-reset', e => this.onFilterReset())
         },
         created() {
+            this.receiver = this.$auth.user().telepon
             this.success = JSON.parse(
                 window.localStorage.getItem('success')
             );
@@ -125,11 +128,13 @@
                 config: {
                     format: 'YYYY-MM-DD HH:mm',
                     useCurrent: false,
-                    sideBySide: true
+                    sideBySide: true,
+
                 },
                 startDate: null,
                 endDate: null,
                 receiver: null,
+                msgStart: '',
                 errors: [],
                 searching: false,
 
@@ -195,7 +200,9 @@
                     direction: 'asc'
                 }
                 ],
-                moreParams: {}
+                moreParams: {
+                    receiver: this.$auth.user().telepon
+                }
             };
         },
 //        computed: {
@@ -215,6 +222,10 @@
             onChangePage (page) {
                 this.$refs.vuetable.changePage(page)
             },
+//            checkDate1() {
+//                console.log('aaappaaaaa')
+////                this.msgStart = 'Please Input this Date !!'
+//            },
             doFilter () {
                 this.searching = true
                 this.$events.fire('filter-set', JSON.stringify({
@@ -274,7 +285,8 @@
                 }
 
                 this.moreParams = {
-                    'receiver': data.receiver,
+//                    'receiver': data.receiver,
+                    'receiver': this.$auth.user().telepon,
                     'start-date': data.startDate,
                     'end-date': data.endDate
                 }
