@@ -4377,18 +4377,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         };
     },
 
-
     methods: {
         login: function login() {
             // Reset error
             this.errors = [];
             if (this.telepon == null) {
-                this.errors.push('No Handphone pengguna dibutuhkan !');
-                document.getElementById('email').focus();
+                this.errors.push('Telepon Number field is required !!');
+                document.getElementById('telepon').focus('telepon');
                 return false;
             } else if (this.password == null) {
-                this.errors.push('Password dibutuhkan !');
-                document.getElementById('password').focus();
+                this.errors.push('Password field is required !');
+                document.getElementById('password').focus(this.password);
                 return false;
             }
 
@@ -4430,6 +4429,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_vue_bootstrap_datetimepicker___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_vue_bootstrap_datetimepicker__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_eonasdan_bootstrap_datetimepicker_build_css_bootstrap_datetimepicker_css__ = __webpack_require__("./node_modules/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_eonasdan_bootstrap_datetimepicker_build_css_bootstrap_datetimepicker_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_eonasdan_bootstrap_datetimepicker_build_css_bootstrap_datetimepicker_css__);
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -4654,11 +4659,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         onChangePage: function onChangePage(page) {
             this.$refs.vuetable.changePage(page);
         },
-
-        //            checkDate1() {
-        //                console.log('aaappaaaaa')
-        ////                this.msgStart = 'Please Input this Date !!'
-        //            },
         doFilter: function doFilter() {
             this.searching = true;
             this.$events.fire('filter-set', JSON.stringify({
@@ -42765,7 +42765,11 @@ var render = function() {
                                   expression: "telepon"
                                 }
                               ],
-                              attrs: { type: "text", name: "telepon" },
+                              attrs: {
+                                type: "text",
+                                name: "telepon",
+                                autofocus: ""
+                              },
                               domProps: { value: _vm.telepon },
                               on: {
                                 input: function($event) {
@@ -43767,19 +43771,42 @@ var render = function() {
               )
             ]),
             _vm._v(" "),
-            _c("div", { staticClass: "modal-footer" }, [
-              _c(
-                "button",
-                {
-                  staticClass: "Btn-Filter",
-                  attrs: { type: "button", "data-dismiss": "modal" },
-                  on: { click: _vm.doFilter }
-                },
-                [_vm._m(2)]
-              ),
-              _vm._v(" "),
-              _c("div", { staticClass: "clearfix" })
-            ])
+            _c(
+              "div",
+              { staticClass: "modal-footer" },
+              [
+                _vm.startDate == null || _vm.endDate == null
+                  ? [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "Btn-Filter",
+                          attrs: {
+                            type: "button",
+                            disabled: "",
+                            "data-dismiss": "modal"
+                          },
+                          on: { click: _vm.doFilter }
+                        },
+                        [_vm._m(2)]
+                      )
+                    ]
+                  : [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "Btn-Filter",
+                          attrs: { type: "button", "data-dismiss": "modal" },
+                          on: { click: _vm.doFilter }
+                        },
+                        [_vm._m(3)]
+                      )
+                    ],
+                _vm._v(" "),
+                _c("div", { staticClass: "clearfix" })
+              ],
+              2
+            )
           ])
         ])
       ]
@@ -43815,6 +43842,15 @@ var staticRenderFns = [
       ),
       _vm._v(" "),
       _c("h4", { staticClass: "modal-title" }, [_vm._v("Search Filter")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("p", { staticClass: "Search" }, [
+      _vm._v("Search "),
+      _c("i", { staticClass: "fa fa-search src" })
     ])
   },
   function() {

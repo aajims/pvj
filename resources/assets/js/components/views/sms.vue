@@ -77,7 +77,13 @@
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" @click="doFilter" class="Btn-Filter" data-dismiss="modal"><p class="Search">Search <i class="fa fa-search src"></i></p></button>
+                        <template v-if="startDate == null || endDate == null">
+                            <button type="button" @click="doFilter" class="Btn-Filter" disabled="" data-dismiss="modal"><p class="Search">Search <i class="fa fa-search src"></i></p></button>
+                        </template>
+                        <template v-else>
+                            <button type="button" @click="doFilter" class="Btn-Filter" data-dismiss="modal"><p class="Search">Search <i class="fa fa-search src"></i></p></button>
+                        </template>
+                        <!--<button type="button" @click="doFilter" class="Btn-Filter" data-dismiss="modal"><p class="Search">Search <i class="fa fa-search src"></i></p></button>-->
                         <div class="clearfix"></div>
                     </div>
                 </div>
@@ -222,10 +228,6 @@
             onChangePage (page) {
                 this.$refs.vuetable.changePage(page)
             },
-//            checkDate1() {
-//                console.log('aaappaaaaa')
-////                this.msgStart = 'Please Input this Date !!'
-//            },
             doFilter () {
                 this.searching = true
                 this.$events.fire('filter-set', JSON.stringify({

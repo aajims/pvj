@@ -23,7 +23,7 @@
                           <img src="../img/phone.png">
                       </span>
                       <div class="styled-input agile-styled-input-top">
-                        <input type="text" name="telepon" v-model="telepon">
+                        <input type="text" name="telepon" v-model="telepon" autofocus>
                         <label>No Handphone</label>
                         <span></span>
                       </div>
@@ -84,18 +84,17 @@
               errors: []
           }
       },
-
       methods: {
           login() {
               // Reset error
               this.errors = [];
               if (this.telepon == null) {
-                  this.errors.push('No Handphone pengguna dibutuhkan !');
-                  document.getElementById('email').focus();
+                  this.errors.push('Telepon Number field is required !!');
+                  document.getElementById('telepon').focus('telepon');
                   return false;
               } else if (this.password == null) {
-                  this.errors.push('Password dibutuhkan !');
-                  document.getElementById('password').focus();
+                  this.errors.push('Password field is required !');
+                  document.getElementById('password').focus(this.password);
                   return false;
               }
 
