@@ -6,7 +6,7 @@
                     <div class="page-header">
                         <h1>SMS Report</h1>
                         <div class="btn-sms pull-right">
-                            <button class="btn btn-warning" v-if="searching" v-on:click="downloadPDF">Download PDF</button>
+                            <button class="btn btn-warning" v-if="searching" v-on:click="downloadPDF2">Download PDF</button>
                             <button class="btn btn-filter" data-toggle="modal" data-target="#filterModal">Search Filter <i class="fa fa-sliders"></i> </button>
                         </div>
                         <div class="clearfix"></div>
@@ -58,7 +58,7 @@
                         <form class="mdl-filter" v-on:submit="filter()">
                             <img src="../img/phone.png" class="Phone">
                             <div class="styleds-input agile-styleds-input-top" @key.enter="doFilter">
-                                <input type="text" name="receiver" disabled v-model="receiver"/>
+                                <input type="text" class="disab" name="receiver" disabled v-model="receiver"/>
                                 <label>Receiver Number (MSISDN)</label>
                                 <span></span>
                             </div>
@@ -77,8 +77,8 @@
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <template v-if="startDate == null || endDate == null">
-                            <button type="button" @click="doFilter" class="Btn-Filter" disabled="" data-dismiss="modal"><p class="Search">Search <i class="fa fa-search src"></i></p></button>
+                        <template v-if="startDate == null || endDate == null || startDate >= endDate">
+                            <button type="button" @click="doFilter" class="Btn-Filter-disable" disabled="" data-dismiss="modal"><p class="Search">Search <i class="fa fa-search src"></i></p></button>
                         </template>
                         <template v-else>
                             <button type="button" @click="doFilter" class="Btn-Filter" data-dismiss="modal"><p class="Search">Search <i class="fa fa-search src"></i></p></button>
@@ -100,6 +100,7 @@
     import DatePicker from 'vue-bootstrap-datetimepicker';
     // Import date picker css
     import 'eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css';
+
 
     export default {
         mounted() {
@@ -287,11 +288,11 @@
                 }
 
                 this.moreParams = {
-//                    'receiver': data.receiver,
                     'receiver': this.$auth.user().telepon,
                     'start-date': data.startDate,
                     'end-date': data.endDate
                 }
+
 
                 let vm = this
                 Vue.nextTick( function() {
@@ -305,6 +306,10 @@
                     vm.$refs.vuetable.refresh()
                 })
             },
+            downloadPDF2(){
+                window.open(baseUrl() + '/sms/download-pdf?receiver='+this.$auth.user().telepon+'&startDate='+this.startDate+'&endDate='+this.endDate,
+                    "_blank")
+            },
             downloadPDF() {
                 // this.savedID = document.getElementsByClassName('table-id-row')
                 let el = document.getElementsByClassName('table-id-row')
@@ -314,8 +319,10 @@
                 }
                 // Remove last &
                 queryData = queryData.replace(/(^\s*&)|(&\s*$)/g, '')
-                window.open(baseUrl() + '/sms/download-pdf' + queryData, "_blank", "width=800,height=500",  false)
-//                window.open('http://192.168.2.20:8005/sms/smsTest' + queryData, "_blank", "width=800,height=500",  false)
+                window.open(baseUrl() + '/sms/download-pdf' + queryData,
+//                    this.$http(baseUrl() + '/sms/download-pdf' + queryData,
+                    "_blank",
+                    "width=800,height=500",  false)
             }
         }
     }

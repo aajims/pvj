@@ -172,7 +172,7 @@ class Data implements \ArrayAccess, \Countable, \IteratorAggregate
      */
     public function getRawData()
     {
-        @trigger_error(sprintf('The %s() method is deprecated since Symfony 3.3 and will be removed in 4.0. Use the array or object access instead.', __METHOD__));
+        @trigger_error(sprintf('The "%s()" method is deprecated since Symfony 3.3 and will be removed in 4.0. Use the array or object access instead.', __METHOD__));
 
         return $this->data;
     }
@@ -227,7 +227,7 @@ class Data implements \ArrayAccess, \Countable, \IteratorAggregate
      *
      * @param string|int $key The key to seek to
      *
-     * @return self|null A clone of $this of null if the key is not set
+     * @return self|null A clone of $this or null if the key is not set
      */
     public function seek($key)
     {

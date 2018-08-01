@@ -5,7 +5,11 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 use App\Sms;
+use Illuminate\Support\Facades\URL;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
+//use GuzzleHttp\psr7\Request;
 use Validator;
 use FPDF;
 
@@ -32,9 +36,9 @@ class SmsController extends Controller
 
         // Apply Filter
         if ($receiver = $request->input('receiver')) {
-            $data->where('receiver', 'like', '%' . $receiver. '%');
-            // $data->where('receiver', 'like', '%' . $msisdn. '%');
-        }
+        $data->where('receiver', 'like', '%' . $receiver. '%');
+        // $data->where('receiver', 'like', '%' . $msisdn. '%');
+    }
 
         if (! empty($startDate = $request->input('start-date')) &&
             ! empty($endDate = $request->input('end-date'))) {
@@ -55,103 +59,102 @@ class SmsController extends Controller
             'data'          => $data->get()
         ]);
     }
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-    }
+    public function downloadPDF(Request $request){
+        $receiver = $_GET['receiver'];
+        $startDate  = $_GET['startDate'];
+        $endDate = $_GET['endDate'];
+        $tgl = date('d F Y');
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        $result = Sms::find($id);
-        return response()->json($result);
-    }
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-    }
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        $validator = Validator::make($request->all(), [
-            'name' => 'bail|required',
-            'telepon' => 'bail|required',
-            'email'    => 'bail|required|email'
-        ]);
-        if ($validator->fails()) {
-            $errors = $validator->errors();
-            return response()->json([
-                'errors' => $errors->all()
-            ], JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
-        }
-        $user = Sms::find($id);
-        $user->name = $request->input('name');
-        $user->email = $request->input('email');
-        $user->telepon = $request->input('telepon');
-        $user->level = $request->input('level');
-        $user->nm_merchant = $request->input('nm_merchant');
-        $user->logo = $request->input('logo');
-        if(!empty($request->input('password'))){
-            $user->password = bcrypt($request->input('password'));
-        }
-        $user->save();
-        return response()->json([
-            'success' => true
-        ]);
-    }
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        $user = Sms::find($id);
-        $user->delete();
-        return response()->json([
-            'succcess' => true
-        ]);
-    }
+        $client = new Client(); //GuzzleHttp\Client
+        $response = $client->get('http://192.168.2.20:8005/sms/smsTest?sort=received%7Casc&page=1&per_page=10&receiver='.$receiver.'&start-date='.$startDate.'&end-date='.$endDate.'');
+        $json = \GuzzleHttp\json_decode($response->getBody());
 
+        $pdf = new FPDF('P', 'mm', 'A4');
+        $pdf->AddPage();
+        $pdf->setFont('Arial', '', 9);
+        $pdf->Image('images/paypro-logo@2x.png',10,10,-100);
+        $pdf->Cell(0, 7, date('d/m/Y', strtotime($tgl)), 20, 1, 'R');
+        $pdf->ln(3);
+        $pdf->setFont('Arial', 'B', 12);
+        $pdf->Cell(0, 10, "Paris Van Java Parking Service ", 20, 1, 'R');
+        $pdf->ln(10);
+        $pdf->setFont('Arial', 'B', 17);
+        $pdf->SetTextColor(138, 39, 133);
+        $pdf->Cell(0, 5, "Report ", 20, 1, 'L');
+        $pdf->ln(3);
+        $pdf->setFont('Arial', '',12);
+        $pdf->SetTextColor(0, 0, 0);
+        $pdf->Cell(0, 5, "Receiver (MSISDN)",  7, 1,'L');
+        $pdf->setFont('Arial', 'B', 12);
+        $pdf->Cell(0, 5, "$receiver From $startDate  -  $endDate", 20, 1, 'L');
+        $pdf->ln(3);
+        $pdf->setFont('Arial', 'B', 12);
+        $total = 0;
+        foreach ($json->data as $obj) {
+            $total += $obj->amount;
+        }
+        $pdf->setFont('Arial', 'B', 12);
+        $pdf->Cell(0, 5,'Total Amount Rp.' . number_format(
+                $total,
+                3,
+                '.',
+                ','
+            ), 20, 1, 'L');
+        $pdf->ln(7);
+        $pdf->SetFont('Arial','B', 12);
+        $pdf->Cell(55, 7, 'Date & time', 1, 0, 'C');
+        $pdf->Cell(45, 7, 'Amount', 1, 0, 'C');
+        $pdf->Cell(45, 7, 'Receiver', 1, 0, 'C');
+        $pdf->Cell(25, 7, 'MSISDN', 1, 0, 'C');
+        $pdf->ln();
+
+        $pdf->SetFont('Arial','', 10);
+
+        foreach ($json->data as $obj) {
+            $x = $pdf->GetX();
+            $y = $pdf->GetY();
+            $height = 10;
+
+            $pdf->MultiCell(55, $height, $obj->received, 1, 'C');
+
+            $pdf->SetXY($x += 55, $y);
+            $pdf->MultiCell(45, $height, 'Rp.' . number_format(
+                    $obj->amount,
+                    3,
+                    '.',
+                    ','
+                ), 1, 'C');
+            $pdf->SetXY($x += 45, $y);
+
+            $pdf->MultiCell(45, $height, $obj->receiver, 1, 'C');
+            $pdf->SetXY($x += 45, $y);
+
+            $pdf->MultiCell(25, $height, $obj->msisdn, 1, 'C');
+            $total += $obj->amount;
+        }
+        $response = $pdf->Output('s');
+        return response($response, 200)
+            ->header('Content-Type', 'application/pdf');
+    }
     /**
      * Download PDF
      * @return [type] [description]
      */
-    public function downloadPDF(Request $request) {
+    public function downloadPDF2(Request $request) {
+        echo "test coba";
         $sms = Sms::orderBy('id', 'asc');
+//     $sms = ('http://192.168.2.20:8005/sms/smsTest'):: orderBy('id', 'asc');
         foreach ($request->input('data') as $key => $val) {
             $sms->orWhere('id', $val);
         }
         $pdf = new FPDF('P', 'mm', 'A4');
         $pdf->AddPage();
         $pdf->SetFont('Arial','B', 7);
-
+        $pdf->SetFillColor(128,128,128);
         $pdf->Cell(25, 7, 'Date & time', 1, 0, 'C');
         $pdf->Cell(25, 7, 'Amount', 1, 0, 'C');
         $pdf->Cell(30, 7, 'Receiver', 1, 0, 'C');
         $pdf->Cell(20, 7, 'MSISDN', 1, 0, 'C');
-        $pdf->Cell(88, 7, 'Message', 1, 0, 'C');
         $pdf->ln();
 
         $pdf->SetFont('Arial','', 7);
@@ -180,8 +183,6 @@ class SmsController extends Controller
             $pdf->SetXY($x += 30, $y);
             $pdf->MultiCell(20, $height, $val->sdn, 1, 'C');
 
-            $pdf->SetXY($x += 20, $y);
-            $pdf->MultiCell(88, $height, 'Message', 1, 'C');
         }
 
         $pdf->ln();

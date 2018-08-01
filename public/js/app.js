@@ -4716,7 +4716,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }
 
             this.moreParams = {
-                //                    'receiver': data.receiver,
                 'receiver': this.$auth.user().telepon,
                 'start-date': data.startDate,
                 'end-date': data.endDate
@@ -4734,6 +4733,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 vm.$refs.vuetable.refresh();
             });
         },
+        downloadPDF2: function downloadPDF2() {
+            window.open(baseUrl() + '/sms/download-pdf?receiver=' + this.$auth.user().telepon + '&startDate=' + this.startDate + '&endDate=' + this.endDate, "_blank");
+        },
         downloadPDF: function downloadPDF() {
             // this.savedID = document.getElementsByClassName('table-id-row')
             var el = document.getElementsByClassName('table-id-row');
@@ -4743,8 +4745,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }
             // Remove last &
             queryData = queryData.replace(/(^\s*&)|(&\s*$)/g, '');
-            window.open(baseUrl() + '/sms/download-pdf' + queryData, "_blank", "width=800,height=500", false);
-            //                window.open('http://192.168.2.20:8005/sms/smsTest' + queryData, "_blank", "width=800,height=500",  false)
+            window.open(baseUrl() + '/sms/download-pdf' + queryData,
+            //                    this.$http(baseUrl() + '/sms/download-pdf' + queryData,
+            "_blank", "width=800,height=500", false);
         }
     }
 });
@@ -43564,7 +43567,7 @@ var render = function() {
                       "button",
                       {
                         staticClass: "btn btn-warning",
-                        on: { click: _vm.downloadPDF }
+                        on: { click: _vm.downloadPDF2 }
                       },
                       [_vm._v("Download PDF")]
                     )
@@ -43691,6 +43694,7 @@ var render = function() {
                             expression: "receiver"
                           }
                         ],
+                        staticClass: "disab",
                         attrs: { type: "text", name: "receiver", disabled: "" },
                         domProps: { value: _vm.receiver },
                         on: {
@@ -43775,12 +43779,14 @@ var render = function() {
               "div",
               { staticClass: "modal-footer" },
               [
-                _vm.startDate == null || _vm.endDate == null
+                _vm.startDate == null ||
+                _vm.endDate == null ||
+                _vm.startDate >= _vm.endDate
                   ? [
                       _c(
                         "button",
                         {
-                          staticClass: "Btn-Filter",
+                          staticClass: "Btn-Filter-disable",
                           attrs: {
                             type: "button",
                             disabled: "",
