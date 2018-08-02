@@ -4010,7 +4010,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         getbalance: function getbalance() {
             var vm = this;
-            this.$http.post('http://192.168.2.20:8005/sms/getBalance', {
+            this.$http.post('https://spi.spicelabs.in/sevtopupper/getBalance', {
                 msisdn: this.$auth.user().telepon
             }).then(function (response) {
                 console.log(response);
@@ -4429,8 +4429,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_vue_bootstrap_datetimepicker___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_vue_bootstrap_datetimepicker__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_eonasdan_bootstrap_datetimepicker_build_css_bootstrap_datetimepicker_css__ = __webpack_require__("./node_modules/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_eonasdan_bootstrap_datetimepicker_build_css_bootstrap_datetimepicker_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_eonasdan_bootstrap_datetimepicker_build_css_bootstrap_datetimepicker_css__);
-//
-//
 //
 //
 //
@@ -43608,7 +43606,7 @@ var render = function() {
                 _c("vuetable", {
                   ref: "vuetable",
                   attrs: {
-                    "api-url": "http://192.168.2.20:8005/sms/smsTest",
+                    "api-url": "https://spi.spicelabs.in/sevtopupper/smsTest",
                     fields: _vm.fields,
                     "pagination-path": "",
                     css: _vm.css.table,

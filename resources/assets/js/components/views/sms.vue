@@ -20,12 +20,10 @@
                         </p>
                         <div class="clearfix"></div>
                     </div>
-                    <!--api-url="http://192.168.2.20:8005/sms/smsFilter"-->
-                    <!--api-url="http://192.168.2.20:8005/sms/smsTest"-->
                     <!--v-bind:api-url="APIUrl + '/sms'"-->
                     <div id="printTable">
                         <vuetable ref="vuetable"
-                                api-url="http://192.168.2.20:8005/sms/smsTest"
+                                api-url="https://spi.spicelabs.in/sevtopupper/smsTest"
                                   v-bind:fields="fields"
                                   pagination-path=""
                                   v-bind:css="css.table"

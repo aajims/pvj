@@ -57,7 +57,7 @@ export default {
             },
             getbalance () {
                 var vm = this
-                this.$http.post('http://192.168.2.20:8005/sms/getBalance', {
+                this.$http.post('https://spi.spicelabs.in/sevtopupper/getBalance', {
                     msisdn: this.$auth.user().telepon
                 }).then(function (response) {
                     console.log(response);
