@@ -73,7 +73,7 @@ class SmsController extends Controller
         $pdf->AddPage();
         $pdf->setFont('Arial', '', 9);
         $pdf->Image('images/paypro-logo@2x.png',10,10,-100);
-        $pdf->Cell(0, 7, date('d/m/Y', strtotime($tgl)), 20, 1, 'R');
+        $pdf->Cell(0, 7, date('F d, Y', strtotime($tgl)), 20, 1, 'R');
         $pdf->ln(3);
         $pdf->setFont('Arial', 'B', 12);
         $pdf->Cell(0, 10, "Paris Van Java Parking Service ", 20, 1, 'R');
