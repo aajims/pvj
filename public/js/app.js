@@ -4638,7 +4638,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 direction: 'asc'
             }],
             moreParams: {
-                receiver: this.$auth.user().telepon
+                receiver: this.$auth.user().telepon,
+                signature: md5('paypro')
             }
         };
     },

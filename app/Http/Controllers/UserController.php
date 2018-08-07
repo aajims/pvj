@@ -80,7 +80,16 @@ class UserController extends Controller
                 'errors' => $errors->all()
             ], JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
         }
-
+        if ( User::Where(
+            $request->input('telepon'),
+            Auth::user()->telepon
+        )) {
+            return response()->json([
+                'errors' => [
+                    'No telepon sudah ada, silahkan masukkan No telepon yang lain !'
+                ]
+            ], JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
+        }
         $user = new User;
         $user->name = $request->input('name');
         $user->email = $request->input('email');

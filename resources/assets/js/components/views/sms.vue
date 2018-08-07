@@ -206,7 +206,8 @@
                 }
                 ],
                 moreParams: {
-                    receiver: this.$auth.user().telepon
+                    receiver: this.$auth.user().telepon,
+                    signature: md5('paypro')
                 }
             };
         },
