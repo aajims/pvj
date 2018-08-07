@@ -23,7 +23,7 @@
                     <!--v-bind:api-url="APIUrl + '/sms'"-->
                     <div id="printTable">
                         <vuetable ref="vuetable"
-                                api-url="https://spi.spicelabs.in/sevtopupper/smsTest"
+                                api-url="https://spi.spicelabs.in/messages/smsTest"
                                   v-bind:fields="fields"
                                   pagination-path=""
                                   v-bind:css="css.table"

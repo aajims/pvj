@@ -5,7 +5,7 @@
                 <div class="col-lg-12">
                     <h1 class="page-header">Edit Data User</h1>
                     <form @submit.prevent="save">
-                        <div class="col-md-6 col-sm-6 body-form">
+                        <div class="col-md-6 col-sm-6 body-form-edit">
                             <div class="alert alert-danger" v-if="errors" v-for="error in errors">
                                 <p>{{ error }}</p>
                             </div>

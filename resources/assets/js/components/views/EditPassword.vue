@@ -54,8 +54,10 @@
                     this.errors.push('Masukkan kata sandi baru !')
                 } else if (this.confirmpassword == null) {
                     this.errors.push('Konfirmasikan Kata sandi baru !')
+                } else if (this.password == this.newpassword) {
+                    this.errors.push('Password baru tidak boleh sama dengan yang baru, ulangi lagi!')
                 } else if (this.newpassword != this.confirmpassword) {
-                    this.errors.push('Kata sandi tidak sama, ulangi !')
+                    this.errors.push('Kata sandi tidak sama, ulangi lagi!')
                 } else {
                     let app = this;
                     this.$http.put(apiUrl() + '/user/updatePassword', {

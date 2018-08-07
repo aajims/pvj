@@ -87,6 +87,9 @@ body {
     border-left: 1px solid #e7e7e7;
   }
 }
+.view{
+  margin-right: 15px;
+}
 .balance {
   text-align: center;
   margin-right: auto;
@@ -95,6 +98,9 @@ body {
 .balance h5{
   font-family: SFProText;
   color: #333333;
+}
+.bor{
+  border: solid 1px #ccc;
 }
 .maen{
   margin-left: 0px;
@@ -486,6 +492,11 @@ a {
   border: solid 1px #666666;
   padding: 15px;
   margin-top: 70px;
+}
+.body-form-edit{
+  border: solid 1px #666666;
+  padding: 29px;
+  margin-top: 10px;
 }
 .dropdown-menu{
   min-width: 190px;

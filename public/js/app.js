@@ -4010,7 +4010,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         getbalance: function getbalance() {
             var vm = this;
-            this.$http.post('https://spi.spicelabs.in/sevtopupper/getBalance', {
+            this.$http.post('https://spi.spicelabs.in/messages/getBalance', {
                 msisdn: this.$auth.user().telepon
             }).then(function (response) {
                 console.log(response);
@@ -4161,8 +4161,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 this.errors.push('Masukkan kata sandi baru !');
             } else if (this.confirmpassword == null) {
                 this.errors.push('Konfirmasikan Kata sandi baru !');
+            } else if (this.password == this.newpassword) {
+                this.errors.push('Password baru tidak boleh sama dengan yang baru, ulangi lagi!');
             } else if (this.newpassword != this.confirmpassword) {
-                this.errors.push('Kata sandi tidak sama, ulangi !');
+                this.errors.push('Kata sandi tidak sama, ulangi lagi!');
             } else {
                 var app = this;
                 this.$http.put(apiUrl() + '/user/updatePassword', {
@@ -42337,7 +42339,7 @@ var render = function() {
             [
               _c(
                 "div",
-                { staticClass: "col-md-6 col-sm-6 body-form" },
+                { staticClass: "col-md-6 col-sm-6 body-form-edit" },
                 [
                   _vm._l(_vm.errors, function(error) {
                     return _vm.errors
@@ -43187,7 +43189,7 @@ var render = function() {
                           expression: "telepon"
                         }
                       ],
-                      attrs: { type: "text", name: "telepon" },
+                      attrs: { type: "number", name: "telepon" },
                       domProps: { value: _vm.telepon },
                       on: {
                         input: function($event) {
@@ -43379,13 +43381,13 @@ var render = function() {
               "form",
               { staticClass: "form-horizontal", attrs: { action: "" } },
               [
-                _c("div", { staticClass: "body-form" }, [
+                _c("div", { staticClass: "body-form-edit" }, [
                   _c("div", { staticClass: "form-group row" }, [
                     _c("label", { staticClass: "col-md-3 col-form-label" }, [
                       _vm._v("Name")
                     ]),
                     _vm._v(" "),
-                    _c("div", { staticClass: "col-md-9" }, [
+                    _c("div", { staticClass: "col-md-9 bor" }, [
                       _c("p", { staticClass: "form-control-static" }, [
                         _vm._v(": " + _vm._s(_vm.name))
                       ])
@@ -43397,7 +43399,7 @@ var render = function() {
                       _vm._v("No Handphone")
                     ]),
                     _vm._v(" "),
-                    _c("div", { staticClass: "col-md-9" }, [
+                    _c("div", { staticClass: "col-md-9 bor" }, [
                       _c("p", { staticClass: "form-control-static" }, [
                         _vm._v(": " + _vm._s(_vm.telepon))
                       ])
@@ -43409,7 +43411,7 @@ var render = function() {
                       _vm._v("Email")
                     ]),
                     _vm._v(" "),
-                    _c("div", { staticClass: "col-md-9" }, [
+                    _c("div", { staticClass: "col-md-9 bor" }, [
                       _c("p", { staticClass: "form-control-static" }, [
                         _vm._v(": " + _vm._s(_vm.email))
                       ])
@@ -43421,7 +43423,7 @@ var render = function() {
                       _vm._v("Level")
                     ]),
                     _vm._v(" "),
-                    _c("div", { staticClass: "col-md-9" }, [
+                    _c("div", { staticClass: "col-md-9 bor" }, [
                       _c("p", { staticClass: "form-control-static" }, [
                         _vm._v(": " + _vm._s(_vm.level))
                       ])
@@ -43433,7 +43435,7 @@ var render = function() {
                       _vm._v("Nama Merchant")
                     ]),
                     _vm._v(" "),
-                    _c("div", { staticClass: "col-md-9" }, [
+                    _c("div", { staticClass: "col-md-9 bor" }, [
                       _c("p", { staticClass: "form-control-static" }, [
                         _vm._v(": " + _vm._s(_vm.nm_merchant))
                       ])
@@ -43445,7 +43447,7 @@ var render = function() {
                       _vm._v("Logo Merchant")
                     ]),
                     _vm._v(" "),
-                    _c("div", { staticClass: "col-md-9" }, [
+                    _c("div", { staticClass: "col-md-9 bor" }, [
                       _c("p", { staticClass: "form-control-static" }, [
                         _vm._v(": " + _vm._s(_vm.logo))
                       ])
@@ -43606,7 +43608,7 @@ var render = function() {
                 _c("vuetable", {
                   ref: "vuetable",
                   attrs: {
-                    "api-url": "https://spi.spicelabs.in/sevtopupper/smsTest",
+                    "api-url": "https://spi.spicelabs.in/messages/smsTest",
                     fields: _vm.fields,
                     "pagination-path": "",
                     css: _vm.css.table,

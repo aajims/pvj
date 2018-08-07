@@ -82,7 +82,6 @@ class UserController extends Controller
         }
 
         $user = new User;
-
         $user->name = $request->input('name');
         $user->email = $request->input('email');
         $user->telepon = $request->input('telepon');
@@ -138,6 +137,16 @@ class UserController extends Controller
             $errors = $validator->errors();
             return response()->json([
                 'errors' => $errors->all()
+            ], JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
+        }
+        if ( User::Where(
+            $request->input('telepon'),
+            Auth::user()->telepon
+        )) {
+            return response()->json([
+                'errors' => [
+                    'No telepon sudah ada, silahkan masukkan No telepon yang lain !'
+                ]
             ], JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
         }
         $user = User::find($id);

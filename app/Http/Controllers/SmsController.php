@@ -66,7 +66,7 @@ class SmsController extends Controller
         $tgl = date('d F Y');
 
         $client = new Client(); //GuzzleHttp\Client
-        $response = $client->get('https://spi.spicelabs.in/sevtopupper/smsTest?sort=received%7Casc&page=1&per_page=10&receiver='.$receiver.'&start-date='.$startDate.'&end-date='.$endDate.'');
+        $response = $client->get('https://spi.spicelabs.in/messages/smsTest?sort=received%7Casc&page=1&per_page=10&receiver='.$receiver.'&start-date='.$startDate.'&end-date='.$endDate.'');
         $json = \GuzzleHttp\json_decode($response->getBody());
 
         $pdf = new FPDF('P', 'mm', 'A4');

@@ -6,40 +6,40 @@
                     <h1 class="page-header">Data User</h1>
                     <div class="card-body">
                         <form action="" class="form-horizontal">
-                            <div class="body-form">
+                            <div class="body-form-edit">
                                 <div class="form-group row">
                                     <label class="col-md-3 col-form-label">Name</label>
-                                    <div class="col-md-9">
+                                    <div class="col-md-9 bor">
                                         <p class="form-control-static">: {{ name }}</p>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-md-3 col-form-label">No Handphone</label>
-                                    <div class="col-md-9">
+                                    <div class="col-md-9 bor">
                                         <p class="form-control-static">: {{ telepon }}</p>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-md-3 col-form-label">Email</label>
-                                    <div class="col-md-9">
+                                    <div class="col-md-9 bor">
                                         <p class="form-control-static">: {{ email }}</p>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-md-3 col-form-label">Level</label>
-                                    <div class="col-md-9">
+                                    <div class="col-md-9 bor">
                                         <p class="form-control-static">: {{ level }}</p>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-md-3 col-form-label">Nama Merchant</label>
-                                    <div class="col-md-9">
+                                    <div class="col-md-9 bor">
                                         <p class="form-control-static">: {{ nm_merchant }}</p>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-md-3 col-form-label">Logo Merchant</label>
-                                    <div class="col-md-9">
+                                    <div class="col-md-9 bor">
                                         <p class="form-control-static">: {{ logo }}</p>
                                     </div>
                                 </div>

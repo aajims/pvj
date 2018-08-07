@@ -15,7 +15,7 @@
                         <span></span>
                     </div>
                     <div class="styledd-input agile-styledd-input-top">
-                        <input type="text" name="telepon" v-model="telepon">
+                        <input type="number" name="telepon" v-model="telepon">
                         <label>Phone Number</label>
                         <span></span>
                     </div>
