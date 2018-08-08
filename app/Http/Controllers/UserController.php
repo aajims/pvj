@@ -159,11 +159,18 @@ class UserController extends Controller
                 'errors' => $errors->all()
             ], JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
         }
-        if (User::find(Auth::id())->telepon === $request->input('telepon')) {
+        if (User::where('telepon', '=', Input::get('telepon'))->count() > 1) {
             return response()->json([
-                'errors'  => ['No Handphone sudah ada, Ganti dengan yang lain !']
+                'errors' => [
+                    'No telepon sudah ada, silahkan masukkan No telepon yang lain !'
+                ]
             ], 400);
         }
+//        if (User::find(Auth::id())->telepon === $request->input('telepon')) {
+//            return response()->json([
+//                'errors'  => ['No Handphone sudah ada, Ganti dengan yang lain !']
+//            ], 400);
+//        }
 
         $user = User::find($id);
         $user->name = $request->input('name');
