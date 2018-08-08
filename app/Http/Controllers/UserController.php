@@ -5,9 +5,11 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 use App\User;
+use Illuminate\Support\Facades\Input;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Validator;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
@@ -69,6 +71,7 @@ class UserController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'bail|required',
             'telepon' => 'bail|required',
+//            'telepon' => 'required|exists:users,telepon,telepon,:attribute',
             'email'    => 'bail|required|email',
             'level'   => 'bail|required'
         ]);
@@ -80,29 +83,36 @@ class UserController extends Controller
                 'errors' => $errors->all()
             ], JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
         }
-        if ( User::Where(
-            $request->input('telepon'),
-            Auth::user()->telepon
-        )) {
+        if (User::where('telepon', '=', Input::get('telepon'))->count() > 1) {
             return response()->json([
                 'errors' => [
                     'No telepon sudah ada, silahkan masukkan No telepon yang lain !'
                 ]
-            ], JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
+            ], 400);
         }
-        $user = new User;
-        $user->name = $request->input('name');
-        $user->email = $request->input('email');
-        $user->telepon = $request->input('telepon');
-        $user->password = bcrypt($request->input('password'));
-        $user->level = $request->input('level');
-        $user->nm_merchant = $request->input('nm_merchant');
-        $user->logo = $request->input('logo');
-        $user->save();
+//        if ( User::find(Auth::user()->telepon ===  $request->input('telepon')
+//        )) {
+//            return response()->json([
+//                'errors' => [
+//                    'No telepon sudah ada, silahkan masukkan No telepon yang lain !'
+//                ]
+//            ], 400);
+//        }
 
-        return response()->json([
-            'success' => true
-        ]);
+            $user = new User;
+            $user->name = $request->input('name');
+            $user->email = $request->input('email');
+            $user->telepon = $request->input('telepon');
+            $user->password = bcrypt($request->input('password'));
+            $user->level = $request->input('level');
+            $user->nm_merchant = $request->input('nm_merchant');
+            $user->logo = $request->input('logo');
+            $user->save();
+
+            return response()->json([
+                'success' => true
+            ]);
+
     }
 
     /**
@@ -140,6 +150,7 @@ class UserController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'bail|required',
             'telepon' => 'bail|required',
+//            'telepon' => 'required|exists:users,telepon,telepon,:attribute',
             'email'    => 'bail|required|email'
         ]);
         if ($validator->fails()) {
@@ -148,16 +159,12 @@ class UserController extends Controller
                 'errors' => $errors->all()
             ], JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
         }
-        if ( User::Where(
-            $request->input('telepon'),
-            Auth::user()->telepon
-        )) {
+        if (User::find(Auth::id())->telepon === $request->input('telepon')) {
             return response()->json([
-                'errors' => [
-                    'No telepon sudah ada, silahkan masukkan No telepon yang lain !'
-                ]
-            ], JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
+                'errors'  => ['No Handphone sudah ada, Ganti dengan yang lain !']
+            ], 400);
         }
+
         $user = User::find($id);
         $user->name = $request->input('name');
         $user->email = $request->input('email');

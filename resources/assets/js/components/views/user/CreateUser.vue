@@ -6,7 +6,7 @@
                     <h1 class="page-header">Input Data User</h1>
                     <!--<form v-bind:action="currentUrl" method="POST" v-on:submit.prevent="save">-->
                     <form @submit.prevent="create">
-                        <div class="col-md-6 col-sm-6 body-form">
+                        <div class="col-md-6 col-sm-6 body-form-edit">
                             <div class="alert alert-danger" v-if="errors" v-for="error in errors">
                                 <p>{{ error }}</p>
                             </div>

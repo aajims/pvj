@@ -134,8 +134,8 @@
                 }).then(function(res){
                     app.loading = false;
                     window.localStorage.setItem('success', JSON.stringify([
-                                                                          'user : ' + app.name + ' telah diubah'
-                                                                          ]));
+                          'user : ' + app.name + ' telah diubah'
+                          ]));
                     app.$router.push({name: 'user'});
                 }).catch(function(res) {
                     if (res.response != undefined) {

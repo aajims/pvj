@@ -43907,7 +43907,7 @@ var render = function() {
             [
               _c(
                 "div",
-                { staticClass: "col-md-6 col-sm-6 body-form" },
+                { staticClass: "col-md-6 col-sm-6 body-form-edit" },
                 [
                   _vm._l(_vm.errors, function(error) {
                     return _vm.errors
