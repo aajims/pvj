@@ -88,7 +88,7 @@ class UserController extends Controller
                 'errors' => [
                     'No telepon sudah ada, silahkan masukkan No telepon yang lain !'
                 ]
-            ], 400);
+            ], JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
         }
 //        if ( User::find(Auth::user()->telepon ===  $request->input('telepon')
 //        )) {
