@@ -6,6 +6,7 @@
                     <div class="page-header">
                         <h1>SMS Report</h1>
                         <div class="btn-sms pull-right">
+                            <button class="btn btn-default" v-if="searching" v-on:click="downloadCSV">Download Excel</button>
                             <button class="btn btn-warning" v-if="searching" v-on:click="downloadPDF2">Download PDF</button>
                             <button class="btn btn-filter" data-toggle="modal" data-target="#filterModal">Search Filter <i class="fa fa-sliders"></i> </button>
                         </div>
@@ -91,6 +92,7 @@
 </template>
 <script>
     import Vue from 'vue';
+    import JsonExcel from 'vue-json-excel'
     import Vuetable from 'vuetable-2/src/components/Vuetable'
     import VuetablePagination from 'vuetable-2/src/components/VuetablePagination';
 
@@ -303,6 +305,10 @@
                 Vue.nextTick( function() {
                     vm.$refs.vuetable.refresh()
                 })
+            },
+            downloadCSV(){
+                window.open(baseUrl() + '/sms/downloadCSV?receiver='+this.$auth.user().telepon+'&startDate='+this.startDate+'&endDate='+this.endDate,
+                    "_blank")
             },
             downloadPDF2(){
                 window.open(baseUrl() + '/sms/download-pdf?receiver='+this.$auth.user().telepon+'&startDate='+this.startDate+'&endDate='+this.endDate,

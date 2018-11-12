@@ -2762,6 +2762,265 @@ module.exports = {
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./node_modules/vue-json-excel/JsonExcel.vue":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_downloadjs__ = __webpack_require__("./node_modules/downloadjs/download.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_downloadjs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_downloadjs__);
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+	props: {
+		// mime type [xls, csv], default: xls
+		'type': {
+			type: String,
+			default: "xls"
+		},
+		// Json to download
+		'data': {
+			type: Array,
+			required: true
+		},
+		// fields inside the Json Object that you want to export
+		// if no given, all the properties in the Json are exported
+		'fields': {
+			type: Object,
+			required: false
+		},
+		// this prop is used to fix the problem with other components that use the
+		// variable fields, like vee-validate. exportFields works exactly like fields
+		'exportFields': {
+			type: Object,
+			required: false
+		},
+		// Title(s) for the data, could be a string or an array of strings (multiple titles)
+		'title': {
+			default: null
+		},
+		// Footer(s) for the data, could be a string or an array of strings (multiple footers)
+		'footer': {
+			default: null
+		},
+		// filename to export, deault: data.xls
+		'name': {
+			type: String,
+			default: "data.xls"
+		},
+		'meta': {
+			type: Array,
+			default: function _default() {
+				return [];
+			}
+		}
+	},
+	computed: {
+		// unique identifier
+		idName: function idName() {
+			var now = new Date().getTime();
+			return 'export_' + now;
+		},
+
+		downloadFields: function downloadFields() {
+			if (this.fields !== undefined) return this.fields;
+
+			if (this.exportFields !== undefined) return this.exportFields;
+		}
+	},
+	methods: {
+		generate: function generate() {
+			if (!this.data.length) {
+				return;
+			}
+			var json = this.getProcessedJson(this.data, this.downloadFields);
+			if (this.type == 'csv') {
+				return this.export(this.jsonToCSV(json), this.name, "application/csv");
+			}
+			return this.export(this.jsonToXLS(json), this.name, "application/vnd.ms-excel");
+		},
+
+		/*
+  Use downloadjs to generate the download link
+  */
+		export: function _export(data, filename, mime) {
+			var blob = this.base64ToBlob(data, mime);
+			__WEBPACK_IMPORTED_MODULE_0_downloadjs___default()(blob, filename, mime);
+		},
+
+		/*
+  jsonToXLS
+  ---------------
+  Transform json data into an xml document with MS Excel format, sadly
+  this format show a prompt when open due to a default behavior
+  on Microsoft office. It's recommended to use CSV format instead.
+  */
+		jsonToXLS: function jsonToXLS(data) {
+			var xlsTemp = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><meta name=ProgId content=Excel.Sheet> <meta name=Generator content="Microsoft Excel 11"><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>${table}</table></body></html>';
+			var xlsData = '<thead><tr>';
+			var colspan = Object.keys(data[0]).length;
+
+			//Header
+			if (this.title != null) {
+				xlsData += this.parseExtraData(this.title, '<th colspan="' + colspan + '">${data}<th></tr><tr>');
+			}
+			//Fields
+			for (var key in data[0]) {
+				xlsData += '<th>' + key + '</th>';
+			}
+			xlsData += '</tr></thead>';
+			xlsData += '<tbody>';
+			//Data
+			data.map(function (item, index) {
+				xlsData += '<tbody><tr>';
+				for (var _key in item) {
+					xlsData += '<td>' + item[_key] + '</td>';
+				}
+				xlsData += '</tr></tbody>';
+			});
+			//Footer
+			if (this.footer != null) {
+				xlsData += '<tfooter><tr>';
+				xlsData += this.parseExtraData(this.footer, '<td colspan="' + colspan + '">${data}<td></tr><tr>');
+				xlsData += '</tr></tfooter>';
+			}
+			return xlsTemp.replace('${table}', xlsData);
+		},
+
+		/*
+  jsonToCSV
+  ---------------
+  Transform json data into an CSV file.
+  */
+		jsonToCSV: function jsonToCSV(data) {
+			var csvData = '';
+			//Header
+			if (this.title != null) {
+				csvData += this.parseExtraData(this.title, '${data}\r\n');
+			}
+			//Fields
+			for (var key in data[0]) {
+				csvData += key + ',';
+			}
+			csvData = csvData.slice(0, csvData.length - 1);
+			csvData += '\r\n';
+			//Data
+			data.map(function (item) {
+				for (var _key2 in item) {
+					var escapedCSV = item[_key2] + ''; // cast Numbers to string
+					if (escapedCSV.match(/[,"\n]/)) {
+						escapedCSV = '"' + escapedCSV.replace(/\"/g, "\"\"") + '"';
+					}
+					csvData += escapedCSV + ',';
+				}
+				csvData = csvData.slice(0, csvData.length - 1);
+				csvData += '\r\n';
+			});
+			//Footer
+			if (this.footer != null) {
+				csvData += this.parseExtraData(this.footer, '${data}\r\n');
+			}
+			return csvData;
+		},
+
+		/*
+  getProcessedJson
+  ---------------
+  Get only the data to export, if no fields are set return all the data
+  */
+		getProcessedJson: function getProcessedJson(data, header) {
+			var keys = this.getKeys(data, header);
+			var newData = [];
+			var _self = this;
+			data.map(function (item, index) {
+				var newItem = {};
+				for (var label in keys) {
+					var iii = item;
+					var property = keys[label];
+					newItem[label] = _self.getNestedData(property, item);
+				}
+				newData.push(newItem);
+			});
+
+			return newData;
+		},
+		getKeys: function getKeys(data, header) {
+			if (header) {
+				return header;
+			}
+
+			var keys = {};
+			for (var key in data[0]) {
+				keys[key] = key;
+			}
+			return keys;
+		},
+		/*
+  parseExtraData
+  ---------------
+  Parse title and footer attribute to the csv format
+  */
+		parseExtraData: function parseExtraData(extraData, format) {
+			var parseData = '';
+			if (Array.isArray(extraData)) {
+				for (var i = 0; i < extraData.length; i++) {
+					parseData += format.replace('${data}', extraData[i]);
+				}
+			} else {
+				parseData += format.replace('${data}', extraData);
+			}
+			return parseData;
+		},
+
+		callItemCallback: function callItemCallback(field, itemValue) {
+			if ((typeof field === 'undefined' ? 'undefined' : _typeof(field)) === 'object' && typeof field.callback === 'function') {
+				return field.callback(itemValue);
+			}
+			return itemValue;
+		},
+		getNestedData: function getNestedData(key, item) {
+			var field = (typeof key === 'undefined' ? 'undefined' : _typeof(key)) === 'object' ? key.field : key;
+
+			var valueFromNestedKey = null;
+			var keyNestedSplit = field.split(".");
+
+			valueFromNestedKey = item[keyNestedSplit[0]];
+			for (var j = 1; j < keyNestedSplit.length; j++) {
+				valueFromNestedKey = valueFromNestedKey[keyNestedSplit[j]];
+			}
+
+			valueFromNestedKey = this.callItemCallback(key, valueFromNestedKey);
+
+			return valueFromNestedKey;
+		},
+		base64ToBlob: function base64ToBlob(data, mime) {
+			var base64 = window.btoa(window.unescape(encodeURIComponent(data)));
+			var bstr = atob(base64);
+			var n = bstr.length;
+			var u8arr = new Uint8ClampedArray(n);
+			while (n--) {
+				u8arr[n] = bstr.charCodeAt(n);
+			}
+			return new Blob([u8arr], { type: mime });
+		}
+	} // end methods
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./node_modules/vuetable-2/src/components/Vuetable.vue":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -4423,14 +4682,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__("./node_modules/vue/dist/vue.common.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuetable_2_src_components_Vuetable__ = __webpack_require__("./node_modules/vuetable-2/src/components/Vuetable.vue");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuetable_2_src_components_Vuetable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_vuetable_2_src_components_Vuetable__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vuetable_2_src_components_VuetablePagination__ = __webpack_require__("./node_modules/vuetable-2/src/components/VuetablePagination.vue");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vuetable_2_src_components_VuetablePagination___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_vuetable_2_src_components_VuetablePagination__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_vue_bootstrap_datetimepicker__ = __webpack_require__("./node_modules/vue-bootstrap-datetimepicker/dist/vue-bootstrap-datetimepicker.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_vue_bootstrap_datetimepicker___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_vue_bootstrap_datetimepicker__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_eonasdan_bootstrap_datetimepicker_build_css_bootstrap_datetimepicker_css__ = __webpack_require__("./node_modules/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_eonasdan_bootstrap_datetimepicker_build_css_bootstrap_datetimepicker_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_eonasdan_bootstrap_datetimepicker_build_css_bootstrap_datetimepicker_css__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_json_excel__ = __webpack_require__("./node_modules/vue-json-excel/JsonExcel.vue");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_json_excel___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_vue_json_excel__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vuetable_2_src_components_Vuetable__ = __webpack_require__("./node_modules/vuetable-2/src/components/Vuetable.vue");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vuetable_2_src_components_Vuetable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_vuetable_2_src_components_Vuetable__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_vuetable_2_src_components_VuetablePagination__ = __webpack_require__("./node_modules/vuetable-2/src/components/VuetablePagination.vue");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_vuetable_2_src_components_VuetablePagination___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_vuetable_2_src_components_VuetablePagination__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_vue_bootstrap_datetimepicker__ = __webpack_require__("./node_modules/vue-bootstrap-datetimepicker/dist/vue-bootstrap-datetimepicker.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_vue_bootstrap_datetimepicker___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_vue_bootstrap_datetimepicker__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_eonasdan_bootstrap_datetimepicker_build_css_bootstrap_datetimepicker_css__ = __webpack_require__("./node_modules/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_eonasdan_bootstrap_datetimepicker_build_css_bootstrap_datetimepicker_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_eonasdan_bootstrap_datetimepicker_build_css_bootstrap_datetimepicker_css__);
 //
 //
 //
@@ -4522,6 +4783,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+
 
 
 
@@ -4556,9 +4819,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
 
     components: {
-        Vuetable: __WEBPACK_IMPORTED_MODULE_1_vuetable_2_src_components_Vuetable___default.a,
-        VuetablePagination: __WEBPACK_IMPORTED_MODULE_2_vuetable_2_src_components_VuetablePagination___default.a,
-        DatePicker: __WEBPACK_IMPORTED_MODULE_3_vue_bootstrap_datetimepicker___default.a
+        Vuetable: __WEBPACK_IMPORTED_MODULE_2_vuetable_2_src_components_Vuetable___default.a,
+        VuetablePagination: __WEBPACK_IMPORTED_MODULE_3_vuetable_2_src_components_VuetablePagination___default.a,
+        DatePicker: __WEBPACK_IMPORTED_MODULE_4_vue_bootstrap_datetimepicker___default.a
     },
     data: function data() {
         return {
@@ -4732,6 +4995,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             __WEBPACK_IMPORTED_MODULE_0_vue___default.a.nextTick(function () {
                 vm.$refs.vuetable.refresh();
             });
+        },
+        downloadCSV: function downloadCSV() {
+            window.open(baseUrl() + '/sms/downloadCSV?receiver=' + this.$auth.user().telepon + '&startDate=' + this.startDate + '&endDate=' + this.endDate, "_blank");
         },
         downloadPDF2: function downloadPDF2() {
             window.open(baseUrl() + '/sms/download-pdf?receiver=' + this.$auth.user().telepon + '&startDate=' + this.startDate + '&endDate=' + this.endDate, "_blank");
@@ -9246,6 +9512,183 @@ function toComment(sourceMap) {
 
 	return '/*# ' + data + ' */';
 }
+
+
+/***/ }),
+
+/***/ "./node_modules/downloadjs/download.js":
+/***/ (function(module, exports, __webpack_require__) {
+
+var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;//download.js v4.2, by dandavis; 2008-2016. [MIT] see http://danml.com/download.html for tests/usage
+// v1 landed a FF+Chrome compat way of downloading strings to local un-named files, upgraded to use a hidden frame and optional mime
+// v2 added named files via a[download], msSaveBlob, IE (10+) support, and window.URL support for larger+faster saves than dataURLs
+// v3 added dataURL and Blob Input, bind-toggle arity, and legacy dataURL fallback was improved with force-download mime and base64 support. 3.1 improved safari handling.
+// v4 adds AMD/UMD, commonJS, and plain browser support
+// v4.1 adds url download capability via solo URL argument (same domain/CORS only)
+// v4.2 adds semantic variable names, long (over 2MB) dataURL support, and hidden by default temp anchors
+// https://github.com/rndme/download
+
+(function (root, factory) {
+	if (true) {
+		// AMD. Register as an anonymous module.
+		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
+				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
+				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	} else if (typeof exports === 'object') {
+		// Node. Does not work with strict CommonJS, but
+		// only CommonJS-like environments that support module.exports,
+		// like Node.
+		module.exports = factory();
+	} else {
+		// Browser globals (root is window)
+		root.download = factory();
+  }
+}(this, function () {
+
+	return function download(data, strFileName, strMimeType) {
+
+		var self = window, // this script is only for browsers anyway...
+			defaultMime = "application/octet-stream", // this default mime also triggers iframe downloads
+			mimeType = strMimeType || defaultMime,
+			payload = data,
+			url = !strFileName && !strMimeType && payload,
+			anchor = document.createElement("a"),
+			toString = function(a){return String(a);},
+			myBlob = (self.Blob || self.MozBlob || self.WebKitBlob || toString),
+			fileName = strFileName || "download",
+			blob,
+			reader;
+			myBlob= myBlob.call ? myBlob.bind(self) : Blob ;
+	  
+		if(String(this)==="true"){ //reverse arguments, allowing download.bind(true, "text/xml", "export.xml") to act as a callback
+			payload=[payload, mimeType];
+			mimeType=payload[0];
+			payload=payload[1];
+		}
+
+
+		if(url && url.length< 2048){ // if no filename and no mime, assume a url was passed as the only argument
+			fileName = url.split("/").pop().split("?")[0];
+			anchor.href = url; // assign href prop to temp anchor
+		  	if(anchor.href.indexOf(url) !== -1){ // if the browser determines that it's a potentially valid url path:
+        		var ajax=new XMLHttpRequest();
+        		ajax.open( "GET", url, true);
+        		ajax.responseType = 'blob';
+        		ajax.onload= function(e){ 
+				  download(e.target.response, fileName, defaultMime);
+				};
+        		setTimeout(function(){ ajax.send();}, 0); // allows setting custom ajax headers using the return:
+			    return ajax;
+			} // end if valid url?
+		} // end if url?
+
+
+		//go ahead and download dataURLs right away
+		if(/^data:([\w+-]+\/[\w+.-]+)?[,;]/.test(payload)){
+		
+			if(payload.length > (1024*1024*1.999) && myBlob !== toString ){
+				payload=dataUrlToBlob(payload);
+				mimeType=payload.type || defaultMime;
+			}else{			
+				return navigator.msSaveBlob ?  // IE10 can't do a[download], only Blobs:
+					navigator.msSaveBlob(dataUrlToBlob(payload), fileName) :
+					saver(payload) ; // everyone else can save dataURLs un-processed
+			}
+			
+		}else{//not data url, is it a string with special needs?
+			if(/([\x80-\xff])/.test(payload)){			  
+				var i=0, tempUiArr= new Uint8Array(payload.length), mx=tempUiArr.length;
+				for(i;i<mx;++i) tempUiArr[i]= payload.charCodeAt(i);
+			 	payload=new myBlob([tempUiArr], {type: mimeType});
+			}		  
+		}
+		blob = payload instanceof myBlob ?
+			payload :
+			new myBlob([payload], {type: mimeType}) ;
+
+
+		function dataUrlToBlob(strUrl) {
+			var parts= strUrl.split(/[:;,]/),
+			type= parts[1],
+			decoder= parts[2] == "base64" ? atob : decodeURIComponent,
+			binData= decoder( parts.pop() ),
+			mx= binData.length,
+			i= 0,
+			uiArr= new Uint8Array(mx);
+
+			for(i;i<mx;++i) uiArr[i]= binData.charCodeAt(i);
+
+			return new myBlob([uiArr], {type: type});
+		 }
+
+		function saver(url, winMode){
+
+			if ('download' in anchor) { //html5 A[download]
+				anchor.href = url;
+				anchor.setAttribute("download", fileName);
+				anchor.className = "download-js-link";
+				anchor.innerHTML = "downloading...";
+				anchor.style.display = "none";
+				document.body.appendChild(anchor);
+				setTimeout(function() {
+					anchor.click();
+					document.body.removeChild(anchor);
+					if(winMode===true){setTimeout(function(){ self.URL.revokeObjectURL(anchor.href);}, 250 );}
+				}, 66);
+				return true;
+			}
+
+			// handle non-a[download] safari as best we can:
+			if(/(Version)\/(\d+)\.(\d+)(?:\.(\d+))?.*Safari\//.test(navigator.userAgent)) {
+				if(/^data:/.test(url))	url="data:"+url.replace(/^data:([\w\/\-\+]+)/, defaultMime);
+				if(!window.open(url)){ // popup blocked, offer direct download:
+					if(confirm("Displaying New Document\n\nUse Save As... to download, then click back to return to this page.")){ location.href=url; }
+				}
+				return true;
+			}
+
+			//do iframe dataURL download (old ch+FF):
+			var f = document.createElement("iframe");
+			document.body.appendChild(f);
+
+			if(!winMode && /^data:/.test(url)){ // force a mime that will download:
+				url="data:"+url.replace(/^data:([\w\/\-\+]+)/, defaultMime);
+			}
+			f.src=url;
+			setTimeout(function(){ document.body.removeChild(f); }, 333);
+
+		}//end saver
+
+
+
+
+		if (navigator.msSaveBlob) { // IE10+ : (has Blob, but not a[download] or URL)
+			return navigator.msSaveBlob(blob, fileName);
+		}
+
+		if(self.URL){ // simple fast and modern way using Blob and URL:
+			saver(self.URL.createObjectURL(blob), true);
+		}else{
+			// handle non-Blob()+non-URL browsers:
+			if(typeof blob === "string" || blob.constructor===toString ){
+				try{
+					return saver( "data:" +  mimeType   + ";base64,"  +  self.btoa(blob)  );
+				}catch(y){
+					return saver( "data:" +  mimeType   + "," + encodeURIComponent(blob)  );
+				}
+			}
+
+			// Blob but not URL support:
+			reader=new FileReader();
+			reader.onload=function(e){
+				saver(this.result);
+			};
+			reader.readAsDataURL(blob);
+		}
+		return true;
+	}; /* end download() */
+}));
 
 
 /***/ }),
@@ -40576,6 +41019,54 @@ exports.default = plugin;
 
 /***/ }),
 
+/***/ "./node_modules/vue-json-excel/JsonExcel.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
+/* script */
+var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./node_modules/vue-json-excel/JsonExcel.vue")
+/* template */
+var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-fb865680\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./node_modules/vue-json-excel/JsonExcel.vue")
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "node_modules/vue-json-excel/JsonExcel.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-fb865680", Component.options)
+  } else {
+    hotAPI.reload("data-v-fb865680", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/component-normalizer.js":
 /***/ (function(module, exports) {
 
@@ -43566,6 +44057,17 @@ var render = function() {
                   ? _c(
                       "button",
                       {
+                        staticClass: "btn btn-default",
+                        on: { click: _vm.downloadCSV }
+                      },
+                      [_vm._v("Download Excel")]
+                    )
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.searching
+                  ? _c(
+                      "button",
+                      {
                         staticClass: "btn btn-warning",
                         on: { click: _vm.downloadPDF2 }
                       },
@@ -44479,6 +44981,34 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-dd92f4f2", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-fb865680\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./node_modules/vue-json-excel/JsonExcel.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    { attrs: { id: _vm.idName }, on: { click: _vm.generate } },
+    [
+      _vm._t("default", [_vm._v("\n\t\tDownload " + _vm._s(_vm.name) + "\n\t")])
+    ],
+    2
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-fb865680", module.exports)
   }
 }
 

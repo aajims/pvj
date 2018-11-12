@@ -12,6 +12,7 @@ use GuzzleHttp\Exception\RequestException;
 //use GuzzleHttp\psr7\Request;
 use Validator;
 use FPDF;
+use League\Csv\Writer;
 
 class SmsController extends Controller
 {
@@ -59,6 +60,40 @@ class SmsController extends Controller
             'data'          => $data->get()
         ]);
     }
+
+    public function downloadCSV()
+    {
+        $receiver = $_GET['receiver'];
+        $startDate  = $_GET['startDate'];
+        $endDate = $_GET['endDate'];
+//        $tgl = date('d F Y');
+        $headers = array(
+            "Content-type" => "text/csv",
+            "Content-Disposition" => "attachment; filename=file.csv",
+            "Pragma" => "no-cache",
+            "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
+            "Expires" => "0"
+        );
+
+        $client = new Client(); //GuzzleHttp\Client
+        $response = $client->get('https://spi.spicelabs.in/messages/smsTest?sort=received%7Casc&page=1&per_page=10&receiver='.$receiver.'&start-date='.$startDate.'&end-date='.$endDate.'');
+        $json = \GuzzleHttp\json_decode($response->getBody());
+//        $reviews = Reviews::getReviewExport($this->hw->healthwatchID)->get();
+        $columns = array('Date & Time', 'Amount', 'Receiver', 'MSISDN');
+
+        $callback = function() use ($json, $columns)
+        {
+            $file = fopen('php://output', 'w');
+            fputcsv($file, $columns);
+
+            foreach($json as $review) {
+                fputcsv($file, array($review->received, $review->amount, $review->receiver, $review->msisdn));
+            }
+            fclose($file);
+        };
+        return Response::stream($callback, 200, $headers);
+    }
+
     public function downloadPDF(Request $request){
         $receiver = $_GET['receiver'];
         $startDate  = $_GET['startDate'];

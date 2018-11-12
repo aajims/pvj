@@ -33,6 +33,7 @@
         "eonasdan-bootstrap-datetimepicker": "^4.17.47",
         "moment": "^2.22.2",
         "vue-bootstrap-datetimepicker": "^4.1.4",
-        "vue-events": "^3.1.0"
+        "vue-events": "^3.1.0",
+        "vue-json-excel": "^0.2.83"
     }
 }
